@@ -19,7 +19,7 @@ export default {
     mounted () {
         setTimeout(() => {
             store.commit('POP_NOTIF', { type: 0, message: '' });
-        }, 2000);
+        }, 4000);
     },
     methods: {
         delete_notif () {

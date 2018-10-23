@@ -6,3 +6,15 @@ $c-main-white: #fcf9fb;
 $c-main-black-lighter: #3c3c42;
 $c-main-black-light: #2b2b2e;
 $c-main-black: #1a1a1d;
+
+.v-centered {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.h-centered {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}

@@ -7,12 +7,12 @@
 <script>
 // import store from '@/store.js';
 // import { mapGetters } from 'vuex';
-import not_loggued from '@/mixins/not_loggued_vues.vue';
+import base from '@/mixins/base.vue';
 
 export default {
   // store,
   name: 'dashboard',
-  mixins: [not_loggued],
+  mixins: [base],
   // computed: {
   //   ...mapGetters([
   //     'is_loggued'

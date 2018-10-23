@@ -9,7 +9,7 @@ let state = {
   popup: {
     type: 0,
     message: 'placeholder',
-    time: 1000
+    time: 3000
   }
 }
 

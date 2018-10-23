@@ -6,7 +6,7 @@
                 input.c-input.c-input-first(name='email' type='text' v-model='email' placeholder='Email')
         .field
             .control
-                input.c-input(name='username' type='text' v-model='username' placeholder='Username')
+                input.c-input(v-model='username' type='text' placeholder='Username')
         .field
             .control
                 input.c-input(name='firstname' type='text' v-model='firstname' placeholder='Firstname')
@@ -63,15 +63,17 @@ export default {
                 if (data.hasOwnProperty('success') && data.success) {
                     this.$store.commit('POP_NOTIF', { type: 'is-success', message: 'Your account has been created succesfully, a confirmation mail has been sent to activate your account.' });
                 } else {
-                    console.log(data);
-                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'The data you sent seems to be wrong, please retry...' })
+                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: data.err })
                     this.password = '';
                     this.cpassword = '';
                     this.$refs.password.focus();
                 }
             }).catch(err => {
                 if (err.status >= 500 && err.status <= 500)
-                    store.commit('POP_NOTIF', { type: 'is-danger', message: 'Server internal error, please retry...' });
+                    //this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Server internal error, please retry...' });
+                    console.log(err)
+                else
+                    console.log(err)
             })
         }
     }

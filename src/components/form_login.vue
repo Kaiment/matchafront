@@ -47,10 +47,10 @@ export default {
             fetch(url, payload).then(res => {
                 return res.json();
             }).then(data => {
-                if (data.success) {
+                if (data.hasOwnProperty('success') && data.success) {
                     store.commit('POP_NOTIF', { type: 'is-success', message: 'You logged in with success'});
                     store.commit('LOG', true);
-                    localStorage.setItem('token', JSON.parse(atob(data.token.split('.')[1])))
+                    localStorage.setItem('token', data.token);
                     this.$router.push('dashboard');
                 } else {
                     store.commit('POP_NOTIF', { type: 'is-danger', message: 'Username and password did not match' });
@@ -59,7 +59,10 @@ export default {
                 }
             }).catch(err => {
                 if (err.status >= 500 && err.status <= 500)
-                    store.commit('POP_NOTIF', { type: 'is-danger', message: 'Server internal erro, please retry...' });
+                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Server internal erro, please retry...' });
+                else
+                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'App error, refresh...' })
+                console.log(err)
             });
         }
     }
