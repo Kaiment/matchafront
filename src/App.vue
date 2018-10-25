@@ -50,6 +50,10 @@ $navbar-item-color: $c-main-white;
 $navbar-item-hover-color: $c-main-black;
 $navbar-item-hover-background-color: $c-main;
 
+$navbar-dropdown-background-color: $c-main-black;
+$navbar-dropdown-item-hover-color: $c-main-black;
+$navbar-dropdown-item-hover-background-color: $c-main;
+
 $navbar-burger-color: $c-main;
 
 $button-focus-box-shadow-size: 0;

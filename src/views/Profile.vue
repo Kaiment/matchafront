@@ -1,10 +1,10 @@
 <template lang="pug">
     .container
         form
-            input(type='file' @change='manage_img' ref='avatar_input' hidden='true')
+            input#avatar_input(type='file' @change='manage_img($event, "avatar")' ref='avatar_input' hidden='true')
             .profile-header.columns
                 .avatar-part.column.is-4
-                    .avatar-box.v-centered(@click='change_avatar')
+                    .avatar-box(@click='change_avatar')
                         img.avatar.v-centered(v-bind:src='avatar')
                 .main-info.column.is-8
                     label.label Firstname
@@ -13,43 +13,47 @@
                     input.input(v-model='lastname' type='text' @blur='set_lastname')
                     label.label Age
                     input.input(v-model='age' type='text' @blur='set_age')
-            .field
-                label.label Gender
-                .select
-                    select(@blur='set_gender' v-model='gender')
-                        option Male
-                        option Female
-            .field
-                label.label Sexual orientation
-                .select
-                    select(@blur='set_sexual_orientation' v-model='sexual_orientation')
-                        option Heterosexual
-                        option Homosexual
-                        option Bisexual
-            .fiel
-                label.label Bio
-                .control
-                    textarea.textarea.is-small(@blur='set_bio' v-model='bio')
-            .field
-                label.label Interests
-                tags-input(element-id='tags' v-model='selectedTags')
-            .columns.is-desktop.is-1
+            .profile-secondary.columns.is-multiline
+                .field.column.is-8
+                    label.label Bio
+                    .control
+                        textarea.textarea.is-small(@blur='set_bio' v-model='bio')
+                    .field
+                        label.label Interests
+                        tags-input(element-id='tags' v-model='selectedTags')
+                        button.column.is-12(@click='') UPDATE
+                div.column.is-4
+                    .field
+                        label.label Gender
+                        .select
+                            select(@blur='set_gender' v-model='gender')
+                                option Male
+                                option Female
+                    .field
+                        label.label Sexual orientation
+                        .select
+                            select(@blur='set_sexual_orientation' v-model='sexual_orientation')
+                                option Heterosexual
+                                option Homosexual
+                                option Bisexual
                 .column
-                    .photo
-                        i.fas.fa-plus-circle
+                    .photo.is-vcenter
                         img(v-bind:src='photos[0]')
+                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(0)' v-if='photos[0]')
                 .column
-                    .photo
-                        <i class="fas fa-plus-circle"></i>
-                        img
+                    .photo.is-vcenter
+                        img(v-bind:src='photos[1]')
+                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(1)' v-if='photos[1]')
                 .column
-                    .photo
-                        <i class="fas fa-plus-circle"></i>
-                        img
+                    .photo.is-vcenter
+                        img(v-bind:src='photos[2]')
+                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(2)' v-if='photos[2]')
                 .column
-                    .photo
-                        <i class="fas fa-plus-circle"></i>
-                        img
+                    .photo.is-vcenter
+                        img(v-bind:src='photos[3]')
+                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(3)' v-if='photos[3]')
+                button.column.is-12(@click.prevent='add_photo') ADD PHOTO
+                input#photos_input(type='file' hidden='true' @change='manage_img($event, "image")' ref='photos_input')
 </template>
 
 <script>
@@ -79,12 +83,12 @@ export default {
                 Authorization: 'Bearer ' + token
             }
         }
-        fetch('http://' + process.env.VUE_APP_SERV_ADDR + ":3000/profile", payload).then(res => {
+        fetch(process.env.VUE_APP_SERV_ADDR + "/profile", payload).then(res => {
             return res.json();
         }).then(data => {
             let genders = { M: 'Male', F: 'Female' };
             let sexual_orientations = { E: 'Heterosexual', O: 'Homosexual', B: 'Bisexual' };
-            this.avatar = 'http://' + process.env.VUE_APP_SERV_ADDR + ':3000/uploads/' + data.avatar; 
+            this.avatar = process.env.VUE_APP_SERV_ADDR + '/uploads/' + data.avatar; 
             this.firstname = data.firstname;
             this.lastname = data.lastname;
             this.email = data.email;
@@ -92,6 +96,7 @@ export default {
             this.gender = genders[data.gender];
             this.sexual_orientation = sexual_orientations[data.sexual_orientation];
             this.bio = data.bio;
+            this.photos = JSON.parse(data.images).map(s => process.env.VUE_APP_SERV_ADDR + '/uploads/' + s);
         }).catch(err => {
             this.$store.commit('POP_NOTIF', 'is-warning', err.err);
         })
@@ -100,7 +105,13 @@ export default {
         change_avatar () {
             this.$refs.avatar_input.click();
         },
-        manage_img (event) {
+        add_photo () {
+            this.$refs.photos_input.click();
+        },
+        manage_img (event, type) {
+            if (type === 'image' && this.photos.length >= 4) {
+                return (this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Maximum number of photos : 4. You need to delete at least one photo' }))
+            }
             let img = event.target.files[0];
             let regexp = /^image\/(png|jpg|jpeg|bmp)$/;
             if (!img.type || !regexp.test(img.type)) {
@@ -111,8 +122,8 @@ export default {
                 return ;
             }
             let formData = new FormData();
-            formData.append('avatar', img);
-            let url = 'http://' + process.env.VUE_APP_SERV_ADDR + ':3000/profile/avatar';
+            formData.append(type, img);
+            let url = process.env.VUE_APP_SERV_ADDR + '/profile/' + type;
             let token = localStorage.getItem('token');
             let payload = {
                 method: 'PUT',
@@ -123,9 +134,36 @@ export default {
                 body: formData
             }
             fetch(url, payload).then(res => res.json()).then(data => {
-                this.avatar = 'http://' + process.env.VUE_APP_SERV_ADDR + ":3000/uploads/" + data.image;
+                if (!data.hasOwnProperty('success'))
+                    return this.$store.commit('POP_NOTIF', 'is-warning', 'Server internal error.'); 
+                if (type === 'avatar')
+                    this.avatar = process.env.VUE_APP_SERV_ADDR + "/uploads/" + data.image;
+                else if (type === 'image')
+                    this.photos.push(process.env.VUE_APP_SERV_ADDR + "/uploads/" + data.image);
             }).catch(err => {
                 console.log(err);
+            })
+        },
+        delete_img (id) {
+            let url = process.env.VUE_APP_SERV_ADDR + '/profile/images/' + id;
+            let payload = {
+                method: 'DELETE',
+                mode: 'cors',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id 
+                })
+            };
+            fetch(url, payload).then(res => res.json()).then(data => {
+                if (!data.hasOwnProperty('success'))
+                    return this.$store.commit('POP_NOTIF', 'is-danger', 'Server internal error.');
+                this.photos.splice(id, 1);
+                return this.$store.commit('POP_NOTIF', 'is-success', 'Pic succesfully deleted.')
+            }).catch(err => {
+                return this.$store.commit('POP_NOTIF', 'is-danger', err.err);
             })
         },
         set_firstname () {
@@ -140,6 +178,9 @@ export default {
         set_age () {
             this.set_data('age', { age: this.age });
         },
+        set_interests () {
+            this.set_data('tags', { tags: this.selectedTags })
+        },
         set_gender () {
             let gender = '-1';
             if (this.gender === 'Male')
@@ -150,7 +191,6 @@ export default {
         },
         set_sexual_orientation () {
             let sexual_orientations = { Heterosexual: 'E', Homosexual: 'O', Bisexual: 'B' };
-            // if (sexual_orientations.hasOwnProperty(this.sexual_orientation))
             let sexual_orientation = '-1';
             if (this.sexual_orientation === 'Heterosexual')
                 sexual_orientation = 'E';
@@ -164,6 +204,7 @@ export default {
             this.set_data('bio', { bio: this.bio });
         },
         set_data (route, data) {
+            let url = process.env.VUE_APP_SERV_ADDR + '/profile' + route;
             let token = localStorage.getItem('token');
             let payload = {
                 method: 'PUT',
@@ -174,7 +215,7 @@ export default {
                 },
                 body: JSON.stringify(data)
             }
-            fetch('http://' + process.env.VUE_APP_SERV_ADDR + ":3000/profile/" + route, payload).then(res => {
+            fetch(url, payload).then(res => {
                 return res.json();
             }).then(data => {
                 if (!data.hasOwnProperty('success'))
@@ -193,6 +234,12 @@ export default {
     .profile-header {
         border: 1px solid $c-main-black-lighter;
         padding: 2em;
+    }
+
+    .profile-secondary {
+        border: 1px solid $c-main-black-lighter;
+        padding: 2em;
+        margin-top: 1em
     }
 
     .avatar-box {
@@ -215,10 +262,21 @@ export default {
     }
 
     .photo {
-        min-height: 25em;
+        min-height: 250px;
+        height: 100%;
         background-color: $c-main-black-lighter;
-        &:hover {
-            cursor: pointer;
+        position: relative;
+        .fa-times-circle {
+            color: #b84343;
+            &:hover {
+                cursor: pointer;
+                color: #963535;
+            }
+        }
+        .delete_img_icon {
+            position: absolute;
+            top: 0.5em;
+            right: 0.5em;
         }
     }
 
@@ -233,6 +291,7 @@ export default {
     .textarea {
         background-color: $c-main-black-lighter;
         color: $c-main-white;
+        height: 100%;
     }
 
     .tags-input {
@@ -251,5 +310,7 @@ export default {
             color: $c-main-white;
         }
     }
+    
+
 </style>
 

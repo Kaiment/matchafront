@@ -13,6 +13,7 @@ export default {
     mounted () {
         if (localStorage.getItem('token'))
             store.commit('LOG', true);
-    }
+    },
+    
 }
 </script>

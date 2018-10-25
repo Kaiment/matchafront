@@ -1,6 +1,6 @@
 <template lang="pug">
     .container
-        transition(name='slide-fadeX' mode='out-in')
+        transition(name='slide-fadeX' mode='out-in' appear)
             form_login.fade-enter-active.fade-leave-active(v-if='!is_loggued && home_state == 1')
             form_signup(v-if='!is_loggued && home_state == 2')
 </template>

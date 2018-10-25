@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 let state = {
-  home_state: 0,
+  home_state: 1,
   loggued: false,
   popup: {
     type: 0,

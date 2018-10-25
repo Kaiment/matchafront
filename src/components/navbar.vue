@@ -11,7 +11,12 @@
             .navbar-start
                 router-link.navbar-item(v-if='!is_loggued' to='/') HOME
                 router-link.navbar-item(v-if='is_loggued' to='/dashboard') DASHBOARD
-                router-link.navbar-item(v-if='is_loggued' to='/profile') PROFILE
+                .navbar-item.has-dropdown(v-if='is_loggued' v-bind:class='drop_settings ? "is-active" : ""' @mouseover='toggle_drop_settings' @mouseleave='toggle_drop_settings_false')
+                    a.navbar-link SETTINGS
+                    .navbar-dropdown(@mouseover='toggle_drop_settings' @mouseleave='toggle_drop_settings_false')
+                        router-link.navbar-item(to='/settings/profile') EDIT PROFILE
+                        router-link.navbar-item(to='/settings/change_password') CHANGE PASSWORD
+                        router-link.navbar-item(to='/settings/change_email') CHANGE EMAIL
             .navbar-end
                 a.navbar-item.auth(v-if='!is_loggued' @click='home_switch(1)') LOG IN
                 a.navbar-item.auth.signup(v-if='!is_loggued' @click='home_switch(2)') SIGN UP
@@ -26,7 +31,8 @@ export default {
     store,
     data () {
         return {
-            isActive: false
+            isActive: false,
+            drop_settings: false
         }
     },
     computed: {
@@ -41,10 +47,16 @@ export default {
         disconnect () {
             localStorage.removeItem('token');
             store.commit('LOG', false);
-            this.$router.push('home')
+            this.$router.push('/');
         },
         toggle_burger () {
             this.isActive = !(this.isActive);
+        },
+        toggle_drop_settings () {
+            this.drop_settings = !(this.drop_settings);
+        },
+        toggle_drop_settings_false () {
+            this.drop_settings = false;
         }
     }
 }
@@ -71,6 +83,10 @@ export default {
         .router-link-exact-active {
             background-color: $c-main;
         }
+    }
+
+    .navbar-dropdown {
+        border: 0;
     }
 
 </style>
