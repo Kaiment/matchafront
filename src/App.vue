@@ -13,19 +13,10 @@
 <script>
 import navbar from '@/components/navbar.vue';
 import popup from '@/components/popup.vue';
-// import store from '@/store.js';
-// import { mapGetters } from 'vuex';
 import base from '@/mixins/base.vue';
 
 export default {
   mixins: [base],
-  // store,
-  // computed: {
-  //   ...mapGetters([
-  //     'popup',
-  //     'is_loggued'
-  //   ])
-  // },
   components: {
     navbar,
     popup

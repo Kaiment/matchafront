@@ -1,24 +1,21 @@
 <template lang="pug">
     .container
         transition(name='slide-fadeX' mode='out-in' appear)
-            form_login.fade-enter-active.fade-leave-active(v-if='!is_loggued && home_state == 1')
-            form_signup(v-if='!is_loggued && home_state == 2')
+            form_login.fade-enter-active.fade-leave-active(v-if='home_state == 1')
+            form_signup(v-else-if='home_state == 2')
+            form_forgot_pw(v-else-if='home_state == 3')
 </template>
 
 <script>
 import form_login from '@/components/form_login.vue';
 import form_signup from '@/components/form_signup.vue';
-// import store from '@/store.js';
+import form_forgot_pw from '@/components/form_forgot_pw.vue';
 import { mapGetters } from 'vuex';
 import base from '@/mixins/base.vue';
 
 export default {
     name: 'home',
     mixins: [base],
-    data () {
-        return {
-        }
-    },
     created () {
         if (localStorage.getItem('token')) {
             this.$store.commit('LOG', true);
@@ -27,7 +24,8 @@ export default {
     },
     components: {
         form_login,
-        form_signup
+        form_signup,
+        form_forgot_pw
     },
     computed: {
         ...mapGetters([
@@ -85,7 +83,6 @@ export default {
         border: 0;
         border-bottom-right-radius: 2px;
         border-bottom-left-radius: 2px;
-        margin-bottom: 20px;
     }
 
     .c-submit {

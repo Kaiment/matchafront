@@ -7,6 +7,7 @@ import Settings from './views/Settings.vue'
 import Profile from './views/Profile.vue'
 import Change_password from './views/Change_password.vue'
 import Change_email from '@/views/Change_email.vue'
+import Reset_password from '@/views/Reset_password.vue'
 import Test from './views/Test.vue'
 
 Vue.use(Router)
@@ -74,6 +75,15 @@ export default new Router({
           beforeEnter: if_isAuth
         }
       ]
+    },
+    {
+      path: '/reset/:id',
+      name: 'reset',
+      component: Reset_password
+    },
+    {
+      path: '/*',
+      redirect: '/'
     }
   ]
 })

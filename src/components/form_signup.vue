@@ -41,6 +41,9 @@ export default {
     },
     methods: {
         sub_form () {
+            if (this.password !== this.cpassword)
+                return this.$store.commit('POP_NOTIF', { type: 'is_danger', message: 'The 2 password did not match, please retry' });
+            // TEST MDP
             let user = {
                 email: this.email,
                 username: this.username,
