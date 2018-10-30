@@ -1,59 +1,60 @@
 <template lang="pug">
-    .container
-        form
-            input#avatar_input(type='file' @change='manage_img($event, "avatar")' ref='avatar_input' hidden='true')
-            .profile-header.columns
-                .avatar-part.column.is-4
-                    .avatar-box(@click='change_avatar')
-                        img.avatar.v-centered(v-bind:src='avatar')
-                .main-info.column.is-8
-                    label.label Firstname
-                    input.input(v-model='firstname' type='text' @blur='set_firstname')
-                    label.label Lastname
-                    input.input(v-model='lastname' type='text' @blur='set_lastname')
-                    label.label Age
-                    input.input(v-model='age' type='text' @blur='set_age')
-            .profile-secondary.columns.is-multiline
-                .field.column.is-8
-                    label.label Bio
-                    .control
-                        textarea.textarea.is-small(@blur='set_bio' v-model='bio')
-                    .field
-                        label.label Interests
-                        tags-input(element-id='tags' v-model='selectedTags')
-                        button.column.is-12(@click='') UPDATE
-                div.column.is-4
-                    .field
-                        label.label Gender
-                        .select
-                            select(@blur='set_gender' v-model='gender')
-                                option Male
-                                option Female
-                    .field
-                        label.label Sexual orientation
-                        .select
-                            select(@blur='set_sexual_orientation' v-model='sexual_orientation')
-                                option Heterosexual
-                                option Homosexual
-                                option Bisexual
-                .column
-                    .photo.is-vcenter
-                        img(v-bind:src='photos[0]')
-                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(0)' v-if='photos[0]')
-                .column
-                    .photo.is-vcenter
-                        img(v-bind:src='photos[1]')
-                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(1)' v-if='photos[1]')
-                .column
-                    .photo.is-vcenter
-                        img(v-bind:src='photos[2]')
-                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(2)' v-if='photos[2]')
-                .column
-                    .photo.is-vcenter
-                        img(v-bind:src='photos[3]')
-                        i.far.fa-times-circle.delete_img_icon(@click='delete_img(3)' v-if='photos[3]')
-                button.column.is-12(@click.prevent='add_photo') ADD PHOTO
-                input#photos_input(type='file' hidden='true' @change='manage_img($event, "image")' ref='photos_input')
+    .hero-body
+        .container
+            form
+                input#avatar_input(type='file' @change='manage_img($event, "avatar")' ref='avatar_input' hidden='true')
+                .profile-header.columns
+                    .avatar-part.column.is-4
+                        .avatar-box(@click='change_avatar')
+                            img.avatar.v-centered(v-bind:src='avatar')
+                    .main-info.column.is-8
+                        label.label Firstname
+                        input.input(v-model='firstname' type='text' @blur='set_firstname')
+                        label.label Lastname
+                        input.input(v-model='lastname' type='text' @blur='set_lastname')
+                        label.label Age
+                        input.input(v-model='age' type='text' @blur='set_age')
+                .profile-secondary.columns.is-multiline
+                    .field.column.is-8
+                        label.label Bio
+                        .control
+                            textarea.textarea.is-small(@blur='set_bio' v-model='bio')
+                        .field
+                            label.label Interests
+                            tags-input(element-id='tags' v-model='selectedTags')
+                            button.column.is-12(@click='') UPDATE
+                    div.column.is-4
+                        .field
+                            label.label Gender
+                            .select
+                                select(@blur='set_gender' v-model='gender')
+                                    option Male
+                                    option Female
+                        .field
+                            label.label Sexual orientation
+                            .select
+                                select(@blur='set_sexual_orientation' v-model='sexual_orientation')
+                                    option Heterosexual
+                                    option Homosexual
+                                    option Bisexual
+                    .column
+                        .photo.is-vcenter
+                            img(v-bind:src='photos[0]')
+                            i.far.fa-times-circle.delete_img_icon(@click='delete_img(0)' v-if='photos[0]')
+                    .column
+                        .photo.is-vcenter
+                            img(v-bind:src='photos[1]')
+                            i.far.fa-times-circle.delete_img_icon(@click='delete_img(1)' v-if='photos[1]')
+                    .column
+                        .photo.is-vcenter
+                            img(v-bind:src='photos[2]')
+                            i.far.fa-times-circle.delete_img_icon(@click='delete_img(2)' v-if='photos[2]')
+                    .column
+                        .photo.is-vcenter
+                            img(v-bind:src='photos[3]')
+                            i.far.fa-times-circle.delete_img_icon(@click='delete_img(3)' v-if='photos[3]')
+                    button.column.is-12(@click.prevent='add_photo') ADD PHOTO
+                    input#photos_input(type='file' hidden='true' @change='manage_img($event, "image")' ref='photos_input')
 </template>
 
 <script>

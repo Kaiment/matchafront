@@ -1,28 +1,22 @@
 <template lang="pug">
-  div.container
-    h1 Dashboard
-    button(@click='test') test
+  div
+    .hero-head
+    .hero-body
+      div.dashboard
+        search_bar
+        p lol
+    .hero-foot
 </template>
 
 <script>
-// import store from '@/store.js';
-// import { mapGetters } from 'vuex';
 import base from '@/mixins/base.vue';
+import search_bar from '@/components/search_bar.vue';
 
 export default {
-  // store,
   name: 'dashboard',
   mixins: [base],
-  // computed: {
-  //   ...mapGetters([
-  //     'is_loggued'
-  //   ])
-  // // },
-  // created () {
-  //   if (!this.is_loggued)
-  //     this.$router.push('home');
-  // },
   components: {
+    search_bar
   },
   methods: {
     test () {
@@ -33,3 +27,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .dashboard {
+    height: 100vh;
+    width: 100%;
+  }
+</style>

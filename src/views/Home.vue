@@ -1,9 +1,10 @@
 <template lang="pug">
-    .container
-        transition(name='slide-fadeX' mode='out-in' appear)
-            form_login.fade-enter-active.fade-leave-active(v-if='home_state == 1')
-            form_signup(v-else-if='home_state == 2')
-            form_forgot_pw(v-else-if='home_state == 3')
+    .hero-body
+        .container
+            transition(name='slide-fadeX' mode='out-in' appear)
+                form_login.fade-enter-active.fade-leave-active(v-if='home_state == 1')
+                form_signup(v-else-if='home_state == 2')
+                form_forgot_pw(v-else-if='home_state == 3')
 </template>
 
 <script>

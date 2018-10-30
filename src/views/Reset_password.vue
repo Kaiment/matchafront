@@ -1,15 +1,16 @@
 <template lang="pug">
-    form.column.is-4.is-offset-4.c-form(@submit.prevent='sub_form')
-        div.title SELECT A NEW PASSWORD
-        .field
-            .control
-                input.c-input.c-input-first(v-model='password' ref='password' type='password' placeholder='Password')
-        .field
-            .control
-                input.c-input.c-input-last(v-model='cpassword' type='password' placeholder='cPassword')
-        .field
-            .control
-                input.button.is-fullwidth.c-submit(type='submit')
+    .hero-body
+        form.column.is-4.is-offset-4.c-form(@submit.prevent='sub_form')
+            div.title SELECT A NEW PASSWORD
+            .field
+                .control
+                    input.c-input.c-input-first(v-model='password' ref='password' type='password' placeholder='Password')
+            .field
+                .control
+                    input.c-input.c-input-last(v-model='cpassword' type='password' placeholder='cPassword')
+            .field
+                .control
+                    input.button.is-fullwidth.c-submit(type='submit')
 </template>
 
 <script>

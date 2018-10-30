@@ -75,6 +75,14 @@ export default {
         }
     }
 
+    .navbar-link {
+        font-family: 'Source Code Pro', 'Monospace';
+        font-weight: 200;
+        &:hover {
+            transition: .5s;
+        }
+    }
+
     .navbar {
         border-bottom: 1px solid $c-main;
     }

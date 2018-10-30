@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { isCompletionStatement } from 'babel-types';
 
 Vue.use(Vuex)
 
@@ -20,13 +21,9 @@ let mutations = {
   LOG (state, log) {
     state.loggued = log;
   },
-  POP_NOTIF (state, { type, message, time }) {
-    // if (state.popup.type)
-    //   state.popup.type = 0;
+  POP_NOTIF (state, { type, message }) {
     state.popup.type = type;
     state.popup.message = message;
-    if (time)
-      state.popup.time = time;
   }
 }
 
@@ -36,8 +33,21 @@ let getters = {
   popup (state) { return state.popup }
 }
 
+let actions = {
+  notifSuccess({ commit }, message) {
+    commit('POP_NOTIF', { type: 'is-success', message });
+  },
+  notifDanger({ commit }, message) {
+    commit('POP_NOTIF', { type: 'is-danger', message });
+  },
+  notifWarning({ commit }, message) {
+    commit('POP_NOTIF', { type: 'is-warning', message });
+  }
+}
+
 export default new Vuex.Store({
   state,
   mutations,
+  actions,
   getters
 })

@@ -4,10 +4,7 @@
       popup(v-if='popup.type', :type='popup.type', :message='popup.message', :time='popup.time')
     .hero.is-fullheight
       navbar
-      .hero-head
-      .hero-body
-        router-view
-      .hero-foot
+      router-view 
 </template>
 
 <script>

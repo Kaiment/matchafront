@@ -14,6 +14,21 @@ export default {
         if (localStorage.getItem('token'))
             store.commit('LOG', true);
     },
+    methods: {
+        AjaxCall(route, method, body) {
+            let url = process.env.VUE_APP_SERV_ADDR + route;
+            let payload = {
+                method,
+                mode: 'cors',
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }
+            return fetch(url, payload);
+        }
+    }
     
 }
 </script>
