@@ -52,7 +52,7 @@
 - [ ] Si deux utilisateurs ont matché ils peuvent **avoir une conversation privée en temps réel**.
 - [ ] L'utilisateur peut voir **depuis n'importe quelle page** les **notifications de nouveau message**.
 
-## Notifications
+## Notifications
 - [ ] **LIKE**.
 - [ ] **VISITE**.
 - [ ] **MESSAGE**.
