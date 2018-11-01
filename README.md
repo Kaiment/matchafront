@@ -12,12 +12,12 @@
 - [x] Son **ORIENTATION SEXUELLE**.
 - [x] Une **BIO** courte.
 - [x] Une liste d'**INTERETS** sous forme de **tag** (ex: #vegan...).
-- [ ] Des **PHOTOS** max 5 donc une qui servira de **PHOTO DE PROFIL**.
-- [ ] Possibilité de tout **MODIFIER** a tout moment.
+- [x] Des **PHOTOS** max 5 donc une qui servira de **PHOTO DE PROFIL**.
+- [x] Possibilité de tout **MODIFIER** a tout moment.
 - [ ] **RESET PASSWORD**.
 - [ ] Pouvoir **CONSULTER LES PROFILS** des gens qui ont consulté ou **liké** le sien.
 - [ ] **SCORE DE POPULARITE PUBLIC**.
-- [ ] **GEOLOCALISATION** a l'arrondissement près si **autorisé ou non**.
+- [x] **GEOLOCALISATION** a l'arrondissement près si **autorisé ou non**.
 
 ## Match
 - [ ] **LISTE DE SUGGESTION** du match total aux plus partiels.
@@ -31,9 +31,9 @@
 - [ ] Liste **FILTRABLE** par **intervalle d'âge**, **localisation**, **intervalle de popularité** et **tags**.
 
 ## Recherche
-- [ ] **intervalle d'AGE**.
-- [ ] **intervalle de SCORE DE POPULARITE**.
-- [ ] **LOCALISATION**.
+- [x] **intervalle d'AGE**.
+- [x] **intervalle de SCORE DE POPULARITE**.
+- [x] **LOCALISATION**.
 - [ ] **1 OU PLUSIEURS TAGS**.
 - [ ] **TRIABLE et FILTRABLE** comme la liste de suggestions.
 
