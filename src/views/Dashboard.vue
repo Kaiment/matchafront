@@ -1,10 +1,11 @@
 <template lang="pug">
-  div
+  div.bodzerlol
     .hero-head
+      .container
+        div.dashboard
+          search_bar
+          p lol
     .hero-body
-      div.dashboard
-        search_bar
-        p lol
     .hero-foot
 </template>
 
@@ -29,7 +30,8 @@ export default {
 </script>
 
 <style lang="scss">
-  .dashboard {
+  .bodzerlol {
+    margin-top: 2em;
     height: 100vh;
     width: 100%;
   }

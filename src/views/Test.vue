@@ -9,15 +9,18 @@ div
 </template>
 
 <script>
+import base from '@/mixins/base.vue';
+
 export default {
+    mixins: [base],
     data () {
         return {
             array: ['banana', 'orange', 'apple']
         }
     },
     created () {
-        fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => {
-            console.log(data);
+        this.AjaxGet('https://api.ipify.org?format=json').then(res => {
+            console.log(res);
         })
     },
     methods: {

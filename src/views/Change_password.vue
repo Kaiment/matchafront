@@ -26,8 +26,8 @@ export default {
     },
     methods: {
         sub_form () {
-            url = process.env.VUE_APP_SERV_ADDR + '/profile/password';
-            payload = {
+            let url = process.env.VUE_APP_SERV_ADDR + '/profile/password';
+            let payload = {
                 method: 'PUT',
                 mode: 'cors',
                 headers: {

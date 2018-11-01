@@ -1,20 +1,20 @@
 <template lang="pug">
-    .hero-body
+    .hero-body.profile
         .container
-            form
-                input#avatar_input(type='file' @change='manage_img($event, "avatar")' ref='avatar_input' hidden='true')
-                .profile-header.columns
-                    .avatar-part.column.is-4
-                        .avatar-box(@click='change_avatar')
-                            img.avatar.v-centered(v-bind:src='avatar')
-                    .main-info.column.is-8
-                        label.label Firstname
-                        input.input(v-model='firstname' type='text' @blur='set_firstname')
-                        label.label Lastname
-                        input.input(v-model='lastname' type='text' @blur='set_lastname')
-                        label.label Age
-                        input.input(v-model='age' type='text' @blur='set_age')
-                .profile-secondary.columns.is-multiline
+            input#avatar_input(type='file' @change='manage_img($event, "avatar")' ref='avatar_input' hidden='true')
+            .profile-header.columns
+                .avatar-part.column.is-4
+                    .avatar-box(@click='change_avatar')
+                        img.avatar.v-centered(v-bind:src='avatar')
+                .main-info.column.is-8
+                    label.label Firstname
+                    input.input(v-model='firstname' type='text' @blur='set_firstname')
+                    label.label Lastname
+                    input.input(v-model='lastname' type='text' @blur='set_lastname')
+                    label.label Age
+                    input.input(v-model='age' type='text' @blur='set_age')
+            .profile-secondary
+                .columns.is-multiline
                     .field.column.is-8
                         label.label Bio
                         .control
@@ -22,7 +22,7 @@
                         .field
                             label.label Interests
                             tags-input(element-id='tags' v-model='selectedTags')
-                            button.column.is-12(@click='') UPDATE
+                            button.column.is-4.is-offset-4.c-btn(@click='') UPDATE
                     div.column.is-4
                         .field
                             label.label Gender
@@ -37,6 +37,7 @@
                                     option Heterosexual
                                     option Homosexual
                                     option Bisexual
+                .columns
                     .column
                         .photo.is-vcenter
                             img(v-bind:src='photos[0]')
@@ -53,8 +54,8 @@
                         .photo.is-vcenter
                             img(v-bind:src='photos[3]')
                             i.far.fa-times-circle.delete_img_icon(@click='delete_img(3)' v-if='photos[3]')
-                    button.column.is-12(@click.prevent='add_photo') ADD PHOTO
-                    input#photos_input(type='file' hidden='true' @change='manage_img($event, "image")' ref='photos_input')
+                button.column.is-4.is-offset-4.c-btn(@click.prevent='add_photo') ADD PHOTO
+                input#photos_input(type='file' hidden='true' @change='manage_img($event, "image")' ref='photos_input')
 </template>
 
 <script>
@@ -205,7 +206,7 @@ export default {
             this.set_data('bio', { bio: this.bio });
         },
         set_data (route, data) {
-            let url = process.env.VUE_APP_SERV_ADDR + '/profile' + route;
+            let url = process.env.VUE_APP_SERV_ADDR + '/profile/' + route;
             let token = localStorage.getItem('token');
             let payload = {
                 method: 'PUT',
@@ -232,6 +233,10 @@ export default {
 <style lang="scss">
     @import '@/assets/custom.scss';
 
+    .profile {
+        margin-top: 2em;
+    }
+
     .profile-header {
         border: 1px solid $c-main-black-lighter;
         padding: 2em;
@@ -240,7 +245,7 @@ export default {
     .profile-secondary {
         border: 1px solid $c-main-black-lighter;
         padding: 2em;
-        margin-top: 1em
+        margin-top: 1em;
     }
 
     .avatar-box {

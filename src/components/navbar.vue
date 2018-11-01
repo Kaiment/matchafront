@@ -20,33 +20,29 @@
             .navbar-end
                 a.navbar-item.auth(v-if='!is_loggued' @click='home_switch(1)') LOG IN
                 a.navbar-item.auth.signup(v-if='!is_loggued' @click='home_switch(2)') SIGN UP
+                router-link.navbar-item(v-if='is_loggued' to='/notification')
+                    i(:class='notif > 0 ? "fas fa-bell" : "far fa-bell"') {{ notif > 0 ? ' ' + nb_notif : '' }}
                 a.navbar-item.auth(v-if='is_loggued' @click='disconnect') DISCONNECT
 </template>
 
 <script>
-import store from '@/store.js';
-import { mapGetters } from 'vuex';
+import base from '@/mixins/base.vue';
 
 export default {
-    store,
+    mixins: [base],
     data () {
         return {
             isActive: false,
-            drop_settings: false
+            drop_settings: false,
         }
-    },
-    computed: {
-        ...mapGetters([
-            'is_loggued'
-        ])
     },
     methods: {
         home_switch (select) {
-            store.commit('AUTH_FORM_SWITCH', select);
+            this.$store.commit('AUTH_FORM_SWITCH', select);
         },
         disconnect () {
             localStorage.removeItem('token');
-            store.commit('LOG', false);
+            this.$store.commit('LOG', false);
             this.$router.push('/');
         },
         toggle_burger () {

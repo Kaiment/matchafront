@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import Dashboard from './views/Dashboard.vue'
 import Settings from './views/Settings.vue'
 import Profile from './views/Profile.vue'
+import Notification_view from './views/Notification.vue'
 import Change_password from './views/Change_password.vue'
 import Change_email from '@/views/Change_email.vue'
 import Reset_password from '@/views/Reset_password.vue'
@@ -48,6 +49,12 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: Profile,
+      beforeEnter: if_isAuth
+    },
+    {
+      path: '/notification',
+      name: 'notification',
+      component: Notification_view,
       beforeEnter: if_isAuth
     },
     {

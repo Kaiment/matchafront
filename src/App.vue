@@ -41,6 +41,17 @@ $navbar-item-hover-background-color: $c-main;
 $navbar-dropdown-background-color: $c-main-black;
 $navbar-dropdown-item-hover-color: $c-main-black;
 $navbar-dropdown-item-hover-background-color: $c-main;
+$dropdown-content-arrow: $c-main;
+
+$tabs-boxed-link-active-border-color: $c-main;
+$tabs-link-color: $c-main-white;
+$tabs-link-hover-color: $c-main-black;
+$tabs-link-active-color: $c-main-white;
+$tabs-boxed-link-hover-background-color: $c-main;
+$tabs-boxed-link-active-background-color: $c-main-black;
+$tabs-boxed-link-hover-border-bottom-color: $c-main;
+$tabs-border-bottom-color: $c-main;
+$tabs-boxed-link-radius: 0;
 
 $navbar-burger-color: $c-main;
 
@@ -48,6 +59,7 @@ $button-focus-box-shadow-size: 0;
 
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
+
 
 .slide-fadeY-enter-active, .slide-fadeY-leave-active  {
   transition: all .4s ease;
