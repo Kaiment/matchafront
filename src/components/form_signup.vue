@@ -42,7 +42,8 @@ export default {
     methods: {
         sub_form () {
             if (this.password !== this.cpassword)
-                return this.$store.commit('POP_NOTIF', { type: 'is_danger', message: 'The 2 password did not match, please retry' });
+                //return this.$store.commit('POP_NOTIF', { type: 'is_danger', message: 'The 2 password did not match, please retry' });
+                return this.$store.dispatch('notifWarning', 'The 2 passwords must be identical')
             // TEST MDP
             let user = {
                 email: this.email,
@@ -59,12 +60,13 @@ export default {
                 },
                 body: JSON.stringify(user)
             }
-            let url = 'http://' + process.env.VUE_APP_SERV_ADDR + ':3000/register';
+            let url = process.env.VUE_APP_SERV_ADDR + '/register';
             fetch(url, payload).then(res => {
                 return res.json();
             }).then(data => {
                 if (data.hasOwnProperty('success') && data.success) {
-                    this.$store.commit('POP_NOTIF', { type: 'is-success', message: 'Your account has been created succesfully, a confirmation mail has been sent to activate your account.' });
+                    this.$store.dispatch('notifSuccess','Your account has been created succesfully, a confirmation mail has been sent to activate your account.');
+                    this.$router.push('home');
                 } else {
                     this.$store.commit('POP_NOTIF', { type: 'is-danger', message: data.err })
                     this.password = '';
@@ -72,11 +74,7 @@ export default {
                     this.$refs.password.focus();
                 }
             }).catch(err => {
-                if (err.status >= 500 && err.status <= 500)
-                    //this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Server internal error, please retry...' });
-                    console.log(err)
-                else
-                    console.log(err)
+                    this.$store.dispatch('notifDanger', 'Server internal error, please retry...');
             })
         }
     }

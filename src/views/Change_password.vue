@@ -1,16 +1,16 @@
 <template lang="pug">
-    .hero-body
+    .full-width
         form.column.is-4.is-offset-4.c-form(@submit.prevent='sub_form')
-                div.title CHANGE PASSWORD
-                .field
-                    .control
-                        input.c-input.c-input(v-model='new_password' ref='password' type='password'  placeholder='New password')
-                .field
-                    .control
-                        input.c-input.c-input-last(v-model='confirm_new_password' ref='password' type='password'  placeholder='Confirm new password')
-                .field
-                    .control
-                        input.button.is-fullwidth.c-submit(type='submit' value='SUBMIT')
+            div.title CHANGE PASSWORD
+            .field
+                .control
+                    input.c-input.c-input(v-model='new_password' ref='password' type='password'  placeholder='New password')
+            .field
+                .control
+                    input.c-input.c-input-last(v-model='confirm_new_password' type='password'  placeholder='Confirm new password')
+            .field
+                .control
+                    input.button.is-fullwidth.c-btn(type='submit' value='SUBMIT')
 </template>
 
 <script>
@@ -26,23 +26,25 @@ export default {
     },
     methods: {
         sub_form () {
-            let url = process.env.VUE_APP_SERV_ADDR + '/profile/password';
-            let payload = {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token'),
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    password: this.new_password,
-                })
+            if (this.new_password !== this.confirm_new_password) {
+                this.$store.dispatch('notifDanger', 'The 2 passwords must be identical');
+                this.confirm_new_password = '';
+                this.$refs.password.focus();
+                return ;
             }
-            fetch(url, payload).then(res => res.json()).then(data => {
+            let payload = {
+                password: this.new_password
+            }
+            this.AjaxCall('/profile/password', 'PUT', payload).then(data => {
                 if (data.hasOwnProperty('success'))
                     this.$store.dispatch('notifSuccess', 'Password updated with success');
+                else {
+                    this.$store.dispatch('notifDanger', data.err);
+                    this.confirm_new_password = '';
+                    this.$refs.password.focus();
+                }
             }).catch(err => {
-                console.log(err);
+                this.$store.dispatch('notifDanger', 'Server internal error...');
             })
         }
     }

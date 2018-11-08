@@ -40,6 +40,7 @@ export default {
     }
 
     .popup {
+        color: $c-main-white;
         width: 80vw;
         position: relative;
         left: -50%;

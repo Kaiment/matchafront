@@ -1,5 +1,5 @@
 <template lang="pug">
-    .hero-body
+    .full-width
         form.column.is-4.is-offset-4.c-form(@submit.prevent='sub_form')
             div.title SELECT A NEW PASSWORD
             .field
@@ -14,7 +14,10 @@
 </template>
 
 <script>
+import base from '@/mixins/base.vue';
+
 export default {
+    mixins: [base],
     data () {
         return {
             password: '',
@@ -24,28 +27,20 @@ export default {
     methods: {
         sub_form () {
             if (this.password !== this.cpassword)
-                return this.$store.commit('POP_NOTIF', { type: 'is_danger', message: 'The 2 passwords did not match, please retry' });
-            // TEST MDP
-            let url = process.env.VUE_APP_SERV_ADDR + '/reset/' + this.$route.params.id;
+                return this.$store.dispatch('notifDanger', 'The 2 passwords did not match, please retry');
+            let route = '/reset/' + this.$route.params.id;
             let body = {
                 password: this.password
             }
-            let payload = {
-                method: 'post',
-                mode: 'cors',
-                headers: {
-                    Authorization: localStorage.getItem('token'),
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            }
-            fetch(url, payload).then(res => res.json()).then(data => {
+            this.AjaxCall(route, 'POST', body).then(data => {
                 if (data.hasOwnProperty('success'))
-                    this.$store.commit('POP_NOTIF', { type: 'is-success', message: 'Your password has been reset with success.' });
-                else
-                    this.$store.commit('POP_NOTIF', { type: 'is-success', message: 'Unexpected error' });
+                    this.$store.dispatch('notifSuccess', 'Your password has been reset with success.');
+                else {
+                    this.$store.dispatch('notifDanger', data.err);
+                    this.$router.push('/home');
+                }
             }).catch(err => {
-                this.$store.commit('POP_NOTIF', { type: 'is-danger', message: err.err })
+                this.$store.dispatch('notifDanger', 'Server internal error');
             })
         }
     }

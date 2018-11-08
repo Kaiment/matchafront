@@ -15,6 +15,7 @@
 import base from '@/mixins/base.vue'
 
 export default {
+    mixins: [base],
     data () {
         return {
             email: ''
@@ -25,22 +26,12 @@ export default {
             let body = {
                 email: this.email
             }
-            let url = process.env.VUE_APP_SERV_ADDR + '/reset'
-            let payload = {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    Authentication: localStorage.getItem('token'),
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            }
-            fetch(url, payload).then(res => res.json()).then(data => {
+            this.AjaxCall('/reset', 'POST', body).then(data => {
                 if (!data.hasOwnProperty('success'))
-                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: data.err });
+                    this.$store.dispatch('notifDanger', data.err);
                 else
-                    this.$store.commit('POP_NOTIF', { type: 'is-success', message: 'An email has been sent, please follow the steps from here.' })
-                this.email = '';
+                    this.$store.dispatch('notifSuccess', 'An email has been sent, please follow the steps from here.')
+                this.$store.commit('AUTH_FORM_SWITCH', 1);
             }).catch(err => {
                 this.$store.commit('POP_NOTIF', { type: 'is-danger', message: err.err });
                 this.email = '';

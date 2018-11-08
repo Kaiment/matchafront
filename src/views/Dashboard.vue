@@ -1,12 +1,9 @@
 <template lang="pug">
-  div.bodzerlol
-    .hero-head
-      .container
-        div.dashboard
-          search_bar
-          p lol
-    .hero-body
-    .hero-foot
+  .full-width
+    .container
+      div.dashboard
+        search_bar
+        p lol
 </template>
 
 <script>

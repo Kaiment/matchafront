@@ -20,8 +20,10 @@
             .navbar-end
                 a.navbar-item.auth(v-if='!is_loggued' @click='home_switch(1)') LOG IN
                 a.navbar-item.auth.signup(v-if='!is_loggued' @click='home_switch(2)') SIGN UP
+                router-link.navbar-item(v-if='is_loggued' to='/messages')
+                    i(class='far fa-comment')
                 router-link.navbar-item(v-if='is_loggued' to='/notification')
-                    i(:class='notif > 0 ? "fas fa-bell" : "far fa-bell"') {{ notif > 0 ? ' ' + nb_notif : '' }}
+                    i(:class='notif ? "fas fa-bell" : "far fa-bell"') {{ notif ? 'lel' : '' }}
                 a.navbar-item.auth(v-if='is_loggued' @click='disconnect') DISCONNECT
 </template>
 
@@ -91,6 +93,10 @@ export default {
 
     .navbar-dropdown {
         border: 0;
+    }
+
+    .fa-bell {
+        color: $c-main-lighter;
     }
 
 </style>

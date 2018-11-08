@@ -3,14 +3,23 @@
     transition(name='slide-fadeY' mode='out-in')
       popup(v-if='popup.type', :type='popup.type', :message='popup.message', :time='popup.time')
     .hero.is-fullheight
-      navbar
-      router-view 
+      .hero-head
+        navbar
+      .hero-body
+        router-view
+      .hero-foot
+        button(@click='test') TEST
+      
 </template>
 
 <script>
 import navbar from '@/components/navbar.vue';
 import popup from '@/components/popup.vue';
 import base from '@/mixins/base.vue';
+import Vue from 'vue';
+import socketIo_vue from 'vue-socket.io';
+import io from 'socket.io-client';
+import store from './store.js';
 
 export default {
   mixins: [base],
@@ -19,9 +28,16 @@ export default {
     popup
   },
   watch: {
-    loggued_user_redirect () {
-        if (this.is_loggued)
-            this.$router.push('dashboard');
+    connect_socket () {
+      console.log(this.$store.is_loggued)
+    }
+  },
+  computed: {
+  },
+  methods: {
+    test () {
+      console.log('ye');
+      Vue.use(socketIo_vue, io(process.env.VUE_APP_SERV_ADDR, { query: 'auth_token=' + localStorage.getItem('token') }), store);
     }
   }
 }

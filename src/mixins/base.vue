@@ -8,8 +8,7 @@ export default {
         ...mapGetters([
             'is_loggued',
             'popup',
-            'notif',
-            'notif_test'
+            'notif'
         ])
     },
     mounted () {
@@ -17,8 +16,19 @@ export default {
             store.commit('LOG', true);
     },
     methods: {
-        AjaxGet(route) {
-            return fetch(route).then(res => res.json());
+        AjaxGet(route, authorization) {
+            let url = process.env.VUE_APP_SERV_ADDR + route;
+            if (authorization) {
+                let payload = {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                }
+                return fetch(url, payload).then(res => res.json());
+            }
+            return fetch(url).then(res => res.json());
         },
         AjaxCall(route, method, body) {
             let url = process.env.VUE_APP_SERV_ADDR + route;
@@ -32,6 +42,9 @@ export default {
                 body: JSON.stringify(body)
             }
             return fetch(url, payload).then(res => res.json());
+        },
+        check_pw (pw) {
+            let regex = /f/;
         }
     }
 }

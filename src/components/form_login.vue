@@ -20,18 +20,18 @@ import base from '@/mixins/base.vue';
 function get_geolocation() {
     navigator.geolocation.getCurrentPosition(position => {
         let geoloc = {
-            lat: position.latitude,
-            lon: position.longitude
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
         }
-        let url = process.env.VUE_APP_ERV_ADDR + '/profile/position';
+        let url = process.env.VUE_APP_SERV_ADDR + '/profile/position';
         let payload = {
-            method: 'POST',
+            method: 'PUT',
             mode: 'cors',
             headers: {
-                Authorization: localStorage.getItem('token'),
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
                 'Content-type': 'application/json'
             },
-            body: geoloc
+            body: JSON.stringify(geoloc)
         }
         fetch(url, payload).then(res => res.json()).then(data => {
             console.log(data)
@@ -67,12 +67,6 @@ export default {
             } catch (err) {
                 user.ip = false;
             }
-            // let resIp = fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => 
-            //     user.ip = data.ip
-            //     console.log(user.ip)
-            // }).catch(err => {
-            //     user.ip = false
-            // });
             let payload = {
                 method: 'POST',
                 mode: 'cors',

@@ -1,5 +1,5 @@
 <template lang="pug">
-    .hero-body
+    .full-width
         .container
             transition(name='slide-fadeX' mode='out-in' appear)
                 form_login.fade-enter-active.fade-leave-active(v-if='home_state == 1')

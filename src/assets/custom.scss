@@ -21,11 +21,16 @@ $c-main-blacker: #0b0b0c;
   transform: translate(-50%, -50%);
 }
 
+.full-width {
+  width: 100%;
+}
+
 .c-btn {
   color: $c-main-white;
-  margin: 1em;
+  width: 100%;
   border: 0;
   background-color: $c-main;
+  padding: 1em;
   &:hover {
     cursor: pointer;
     background-color: $c-main-light;

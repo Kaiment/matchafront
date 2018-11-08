@@ -21,8 +21,9 @@
                             textarea.textarea.is-small(@blur='set_bio' v-model='bio')
                         .field
                             label.label Interests
-                            tags-input(element-id='tags' v-model='selectedTags')
-                            button.column.is-4.is-offset-4.c-btn(@click='') UPDATE
+                            tags-input(element-id='tags' v-model='selectedTags' )
+                            input.column.is-4.is-offset-4.c-btn(type='submit' @click='set_interests' value='UPDATE')
+                            p {{ selectedTags }}
                     div.column.is-4
                         .field
                             label.label Gender
@@ -79,18 +80,10 @@ export default {
         }
     },
     created () {
-        let token = localStorage.getItem('token');
-        let payload = {
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        }
-        fetch(process.env.VUE_APP_SERV_ADDR + "/profile", payload).then(res => {
-            return res.json();
-        }).then(data => {
+        this.AjaxGet("/profile", true).then(data => {
             let genders = { M: 'Male', F: 'Female' };
             let sexual_orientations = { E: 'Heterosexual', O: 'Homosexual', B: 'Bisexual' };
-            this.avatar = process.env.VUE_APP_SERV_ADDR + '/uploads/' + data.avatar; 
+            this.avatar = this.avatar ? process.env.VUE_APP_SERV_ADDR + '/uploads/' + data.avatar : '/anonymous.svg'; 
             this.firstname = data.firstname;
             this.lastname = data.lastname;
             this.email = data.email;
@@ -98,9 +91,15 @@ export default {
             this.gender = genders[data.gender];
             this.sexual_orientation = sexual_orientations[data.sexual_orientation];
             this.bio = data.bio;
+            this.selectedTags = data.tags;
             this.photos = JSON.parse(data.images).map(s => process.env.VUE_APP_SERV_ADDR + '/uploads/' + s);
         }).catch(err => {
-            this.$store.commit('POP_NOTIF', 'is-warning', err.err);
+            this.$store.dispatch('notifDanger', err.err);
+        })
+        this.AjaxGet('/profile/tags', true).then(res => {
+
+        }).catch(err => {
+            this.$store.dispatch('notifWarning', 'Failed to fetch the most populars tags');
         })
     },
     methods: {
@@ -181,6 +180,7 @@ export default {
             this.set_data('age', { age: this.age });
         },
         set_interests () {
+            console.log(JSON.stringify({ tags: this.selectedTags }));
             this.set_data('tags', { tags: this.selectedTags })
         },
         set_gender () {
@@ -193,37 +193,20 @@ export default {
         },
         set_sexual_orientation () {
             let sexual_orientations = { Heterosexual: 'E', Homosexual: 'O', Bisexual: 'B' };
-            let sexual_orientation = '-1';
-            if (this.sexual_orientation === 'Heterosexual')
-                sexual_orientation = 'E';
-            else if (this.sexual_orientation === 'Homosexual')
-                sexual_orientation = 'O';
-            else if (this.sexual_orientation === 'Bisexual')
-                sexual_orientation = 'B';
-            this.set_data('sexual_orientation', { sexual_orientation: sexual_orientation });
+            if (!sexual_orientations.hasOwnProperty(this.sexual_orientation))
+                return this.$store.dispatch('notifDanger', 'Please fill this field with a correct value.');
+            this.set_data('sexual_orientation', { sexual_orientation: sexual_orientations[this.sexual_orientation] });
         },
         set_bio () {
             this.set_data('bio', { bio: this.bio });
         },
         set_data (route, data) {
-            let url = process.env.VUE_APP_SERV_ADDR + '/profile/' + route;
-            let token = localStorage.getItem('token');
-            let payload = {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                body: JSON.stringify(data)
-            }
-            fetch(url, payload).then(res => {
-                return res.json();
-            }).then(data => {
+            this.AjaxCall('/profile/' + route, 'PUT', data).then(data => {
                 if (!data.hasOwnProperty('success'))
-                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: data.err });
+                    this.$store.dispatch('notifDanger', data.err);
             }).catch(err => {
-                this.$store.commit('POP_NOTIF', { type: 'is-danger', message: err.err });
+                this.$store.dispatch('notifDanger', err.err);
+                console.log(err)
             })
         }
     }

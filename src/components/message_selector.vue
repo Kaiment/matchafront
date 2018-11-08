@@ -4,33 +4,27 @@
             img.is-center(:src='img_src')
         .info_part.column.is-10.is-8-tablet
             .name.text {{ firstname }} {{ lastname }}
-            .age.text Age: {{ age }}
-            .bio.text {{ bio }}
+            .msg.text {{ last_message }}
 </template>
 
 <script>
 export default {
     props: {
-        img_src: {
-            type: String,
-            default: 'risitas.png'
-        },
         firstname: String,
         lastname: String,
-        age: String,
-        bio: String
-    }
+        last_message: String,
+        img_src: String
+    }    
 }
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import '@/assets/custom.scss';
 
     .thumbnail {
-        border: 1px solid $c-main-blacker;
         background-color: $c-main-black-light;
-        max-height: 8em;
+        height: 5em;
         color: $c-main-white;
         margin: 1px;
         .img_part {
@@ -49,20 +43,19 @@ export default {
         .name {
             font-weight: bold;
             width: 100%;
-            overflow: ellipsis;
-            border-bottom: 1px solid #5e5f66;
+            text-overflow: ellipsis;
             margin-bottom: 0em;
         }
         .age {
             font-size: .7em;
         }
-        .bio {
-            font-size: .8em;
+        .msg {
+            color: #888888;
+            font-size: .6em;
             width: 100%;
-            max-height: 50%;
-            word-wrap: break-word;
-            overflow-y: auto;
-            overflow-x: hidden;
+            height: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         &:hover {
             transition: 0.2s;
