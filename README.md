@@ -16,7 +16,7 @@
 - [x] Possibilité de tout **MODIFIER** a tout moment.
 - [x] **RESET PASSWORD**.
 - [x] Pouvoir **CONSULTER LES PROFILS** des gens qui ont consulté ou **liké** le sien.
-- [ ] **SCORE DE POPULARITE PUBLIC**.
+- [x] **SCORE DE POPULARITE PUBLIC**.
 - [x] **GEOLOCALISATION** a l'arrondissement près si **autorisé ou non**.
 
 ## Match
