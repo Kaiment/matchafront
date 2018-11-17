@@ -39,13 +39,13 @@
 
 ## Profil des autres utilisateurs
 - [x] **TOUTES LES INFOS** sauf e-mail et mot de passe.
-- [ ] Le profil visité doit **APPARAITRE DANS L'HISTORIQUE des recherches**.
+- [x] Le profil visité doit **APPARAITRE DANS L'HISTORIQUE des recherches**.
 - [x] Pouvoir **LIKER OU UNLIKER** si il y a au moins un photo.
-- [ ] Voir que **LE PROFIL VISITE A DEJA LIKE l'utilisateur**.
+- [x] Voir que **LE PROFIL VISITE A DEJA LIKE l'utilisateur**.
 - [x] Voir le **SCORE DE POPULARITE**.
 - [ ] Voir si l'utilisateur est **en ligne** sinon afficher la **date de derniere visite**.
-- [ ] **SIGNALER** le profil pour fake.
-- [ ] **BLOQUER** le profil. Le profil **n'apparaitra plus dans les recherches** et ne doit **plus générer de notifications**.
+- [x] **SIGNALER** le profil pour fake.
+- [x] **BLOQUER** le profil. Le profil **n'apparaitra plus dans les recherches** et ne doit **plus générer de notifications**.
 
 ## Chat
 - [ ] Si les **deux utilisateurs se sont liké**, ils ont **matché**.
@@ -53,11 +53,11 @@
 - [ ] L'utilisateur peut voir **depuis n'importe quelle page** les **notifications de nouveau message**.
 
 ## Notifications
-- [ ] **LIKE**.
-- [ ] **VISITE**.
+- [x] **LIKE**.
+- [x] **VISITE**.
 - [ ] **MESSAGE**.
-- [ ] **MATCH**.
-- [ ] **UNE PERSONNE MATCHEE UNLIKE**.
-- [ ] Voir **depuis n'importe quelle page** qu'une **notif n'a pas été vue**.
+- [x] **MATCH**.
+- [x] **UNE PERSONNE MATCHEE UNLIKE**.
+- [x] Voir **depuis n'importe quelle page** qu'une **notif n'a pas été vue**.
 
 - [x] Seed qui servira a initialiser la base de données de 500 a 1 000 fake utilisateur pour tester l'optimisation du site.

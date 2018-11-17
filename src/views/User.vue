@@ -1,7 +1,10 @@
 <template lang="pug">
     .profile_box.container
+        i.fas.fa-flag(@click='report_user')
         .profile_header
             img.avatar(:src='avatar')
+            .liked_me(v-if='liked_me')
+                i.fas.fa-heart  Liked You !
             .main_info
                 .columns.actions
                     .column.is-6.is-offset-3
@@ -47,7 +50,8 @@ export default {
             photos: [],
             is_liked: false,
             is_blocked: false,
-            liked_me: false
+            liked_me: false,
+            has_reported: false
         }
     },
     mounted () {
@@ -134,6 +138,19 @@ export default {
                 this.serv_err();
                 this.$router.push('/dashboard');
             })
+        },
+        report_user () {
+            let route = 'otherprofile/block/' + this.id;
+            this.AjaxCall(route, 'PUT', {}).then(res => {
+                if (res.hasOwnProperty('success') && !this.has_reported) {
+                    this.$store.dispatch('notifSuccess', 'User reported with success');
+                    this.has_reported = true;
+                } else {
+                    this.$store.dispatch('notifWarning', res.err);
+                }
+            }).catch(err => {
+                this.err_redirect();
+            })
         }
     }
 }
@@ -152,13 +169,14 @@ export default {
 
     .block-btn {
         border-radius: 2px;
-    }    
+    }
 
     .profile_box {
+        background-color: $c-main-black-light;
+        position: relative;
         border-radius: 2px;
         max-width: 600px;
         padding: 1em;
-        background-color: $c-main-black-light;
         p {
             color: $c-main-white;
         }
@@ -219,5 +237,20 @@ export default {
         float: left;
         padding: 0.2em 0.5em;
         margin: 4px;
+    }
+
+    .fa-flag {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: $c-main-white;
+        &:hover {
+            color: $c-main;
+            cursor: pointer;
+        }
+    }
+
+    .liked_me {
+        color: $c-main-lighter;
     }
 </style>
