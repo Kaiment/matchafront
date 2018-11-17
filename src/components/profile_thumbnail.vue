@@ -12,6 +12,10 @@
 <script>
 export default {
     props: {
+        like_me: {
+            type: Number,
+            default: 0
+        },
         notif_id: {
             type: Number,
             default: null

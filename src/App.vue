@@ -124,4 +124,8 @@ body {
 
 textarea, select, input, button { outline: none; }
 
+.columns {
+  margin: 0;
+}
+
 </style>

@@ -1,10 +1,5 @@
 <template lang="pug">
         .component.columns.is-multiline.is-centered
-            .search.column.is-12
-                .searchBar
-                    input.bar(placeholder='SEARCH USER' type='text', @keyup.13='search_user', ref='search_input')
-                    button.btn(@click='search_user')
-                        i.fa.fa-search
             .filters.column.is-8
                 .field
                     label Between {{ age_interval[0] }} - {{ age_interval[1] }} years old
