@@ -16,32 +16,9 @@
 
 <script>
 import base from '@/mixins/base.vue';
-
-function get_geolocation() {
-    navigator.geolocation.getCurrentPosition(position => {
-        let geoloc = {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-        }
-        let url = process.env.VUE_APP_SERV_ADDR + '/profile/position';
-        let payload = {
-            method: 'PUT',
-            mode: 'cors',
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(geoloc)
-        }
-        fetch(url, payload).then(res => res.json()).then(data => {
-            console.log(data)
-        }).catch(err => {
-            console.log(err);
-        })
-    }, error => {
-        console.log(error)
-    })
-}
+import socketIo_vue from 'vue-socket.io';
+import io from 'socket.io-client';
+import Vue from 'vue';
 
 export default {
     mixins: [base],
@@ -54,6 +31,8 @@ export default {
     },
     methods: {
         async sub_form () {
+            if (this.username === '' || this.password === '')
+                return this.$store.dispatch('notifDanger', 'Please fill every fields.');
             let user = {
                 username: this.username,
                 password: this.password,
@@ -67,38 +46,42 @@ export default {
             } catch (err) {
                 user.ip = false;
             }
-            let payload = {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                },
-                body: JSON.stringify(user)
-            }
-            let url = process.env.VUE_APP_SERV_ADDR + '/get_token';
-            fetch(url, payload).then(res => {
-                return res.json();
-            }).then(data => {
-                if (data.hasOwnProperty('success') && data.success) {
-                    this.$store.commit('POP_NOTIF', { type: 'is-success', message: 'You logged in with success'});
+            this.AjaxCall('/get_token', 'POST', user).then(data => {
+                if (data.hasOwnProperty('success')) {
+                    this.$store.dispatch('notifSuccess', 'You logged in with success');
                     this.$store.commit('LOG', true);
                     localStorage.setItem('token', data.token);
                     this.$router.push('dashboard');
-                    get_geolocation();
+                    this.io_connect();
+                    if ('geolocation' in navigator) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            let geoloc = {
+                                lat: position.coords.latitude,
+                                lon: position.coords.longitude
+                            }
+                            this.AjaxCall('/profile/position', 'PUT', geoloc);
+                        }, () => {
+                            return ;
+                        })
+                    }
                 } else {
-                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Username and password did not match' });
+                    this.$store.dispatch('notifDanger', data.err);
                     this.password = '';
                     this.$refs.password.focus();
                 }
             }).catch(err => {
+                console.log(err)
                 if (err.status >= 500 && err.status <= 500)
-                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Server internal erro, please retry...' });
+                    this.$store.dispatch('notifDanger','Server internal error, please retry...');
                 else
-                    this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'App error, refresh...' })
+                    this.$store.dispatch('notifDanger', err);
             });
         },
         home_switch(select) {
             this.$store.commit('AUTH_FORM_SWITCH', select);
+        },
+        io_connect () {
+            Vue.use(socketIo_vue, io(process.env.VUE_APP_SERV_ADDR, { query: 'auth_token=' + localStorage.getItem('token') }), this.$store);
         }
     }
 }

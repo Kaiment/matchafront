@@ -1,5 +1,6 @@
 <template lang="pug">
     .thumbnail.columns.is-mobile
+        i.fas.fa-user-alt(@click='goto_profile(user_id)')
         .img_part.column.is-2.is-4-tablet
             img.is-center(:src='img_src')
         .info_part.column.is-10.is-8-tablet
@@ -10,19 +11,31 @@
 <script>
 export default {
     props: {
+        user_id: {
+            type: Number,
+            default: 0
+        },
         firstname: String,
         lastname: String,
         last_message: String,
         img_src: String
-    }    
+    },
+    methods: {
+        goto_profile (id) {
+            if (id == 0)
+                return this.$store.dispatch('notifWarning', 'Can\'t find user, you may have to refresh your app');
+            this.$router.push('/user/' + id);
+        }
+    }
 }
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import '@/assets/custom.scss';
 
     .thumbnail {
+        position: relative;
         background-color: $c-main-black-light;
         height: 5em;
         color: $c-main-white;
@@ -61,6 +74,20 @@ export default {
             transition: 0.2s;
             background-color: $c-main-black-lighter;
             cursor: pointer;
+        }
+    }
+
+    .fa-user-alt {
+        position: absolute;
+        border: 1px solid $c-main-white;
+        padding: 2px;
+        border-radius: 3px;
+        top: 3px;
+        right: 3px;
+        color: $c-main-white;
+        &:hover {
+            color: $c-main-lighter;
+            border-color: $c-main-lighter;
         }
     }
 </style>

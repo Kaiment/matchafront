@@ -1,5 +1,5 @@
 <template lang="pug">
-    .popup-container
+    .popup-container(@click='delete_notif')
         div(:class='type').notification.popup {{ message }}
             button.delete(@click='delete_notif')
 </template>
@@ -35,8 +35,13 @@ export default {
     .popup-container {
         margin-top: 4em;
         position: absolute;
-       left: 50%;
+        left: 50%;
         z-index: 999;
+        cursor: pointer;
+        &:hover {
+            -webkit-filter: brightness(110%);
+            filter: brightness(110%);
+        }
     }
 
     .popup {

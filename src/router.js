@@ -4,14 +4,17 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import User from './views/User.vue'
 import Dashboard from './views/Dashboard.vue'
+import History_view from './views/History.vue'
 import Settings from './views/Settings.vue'
 import Profile from './views/Profile.vue'
 import Messages from './views/Messages.vue'
 import Notification_view from './views/Notification.vue'
 import Change_password from './views/Change_password.vue'
 import Change_email from '@/views/Change_email.vue'
+import Blocked from '@/views/Blocked.vue'
 import Reset_password from '@/views/Reset_password.vue'
 import Confirm_account from '@/views/Confirm_account.vue'
+import Confirm_new_email from '@/views/Confirm_new_email.vue'
 import Test from './views/Test.vue'
 
 Vue.use(Router)
@@ -54,6 +57,12 @@ export default new Router({
       beforeEnter: if_isAuth
     },
     {
+      path: '/history',
+      name: 'history',
+      component: History_view,
+      beforeEnter: if_isAuth
+    },
+    {
       path: '/notification',
       name: 'notification',
       component: Notification_view,
@@ -89,18 +98,29 @@ export default new Router({
           path: 'change_email',
           component: Change_email,
           beforeEnter: if_isAuth
+        },
+        {
+          path: 'blacklist',
+          component: Blocked
         }
       ]
     },
     {
       path: '/reset/:id',
       name: 'reset',
-      component: Reset_password
+      component: Reset_password,
+      beforeEnter: if_isNotAuth
     },
     {
       path: '/confirm/:token',
       name: 'confirm',
-      component: Confirm_account
+      component: Confirm_account,
+      beforeEnter: if_isNotAuth
+    },
+    {
+      path: '/confirmnewemail/:confirm_code',
+      name:'confirmnewemail',
+      component: Confirm_new_email
     },
     {
       path: '/*',

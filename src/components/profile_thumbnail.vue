@@ -1,24 +1,48 @@
 <template lang="pug">
-    .thumbnail.columns.is-mobile
+    .thumbnail.columns.is-mobile(@click='goto_user')
+        i(v-if='is_notif', :class='is_read == 0 ? "fa fa-circle fa-xs" : "far fa-circle fa-xs"')
         .img_part.column.is-2.is-4-tablet
             img.is-center(:src='img_src')
         .info_part.column.is-10.is-8-tablet
             .name.text {{ firstname }} {{ lastname }}
-            .age.text Age: {{ age }}
+            .age.text from {{ city }}, {{ age }}
             .bio.text {{ bio }}
 </template>
 
 <script>
 export default {
     props: {
+        notif_id: {
+            type: Number,
+            default: null
+        },
+        is_notif: {
+            type: Boolean,
+            default: false
+        },
+        is_read: {
+            type: Number,
+            default: 0
+        },
+        user_id: {
+            type: Number,
+            default: null
+        },
         img_src: {
             type: String,
             default: 'risitas.png'
         },
         firstname: String,
         lastname: String,
-        age: String,
+        city: String,
+        age: Number,
         bio: String
+    },
+    methods: {
+        goto_user () {
+            if (this.user_id)
+                this.$router.push('/user/' + this.user_id);
+        }
     }
 }
 </script>
@@ -28,9 +52,10 @@ export default {
     @import '@/assets/custom.scss';
 
     .thumbnail {
+        position: relative;
         border: 1px solid $c-main-blacker;
         background-color: $c-main-black-light;
-        max-height: 8em;
+        max-height: 10em;
         color: $c-main-white;
         margin: 1px;
         .img_part {
@@ -41,7 +66,7 @@ export default {
             }
         }
         .info_part {
-            padding: 0.5em;
+            padding: 0.1em;
         }
         .text {
             text-align: left;
@@ -57,9 +82,11 @@ export default {
             font-size: .7em;
         }
         .bio {
+            line-height: .8em;
             font-size: .8em;
             width: 100%;
-            max-height: 50%;
+            max-height: 2em;
+            padding: 0.2em;
             word-wrap: break-word;
             overflow-y: auto;
             overflow-x: hidden;
@@ -68,6 +95,11 @@ export default {
             transition: 0.2s;
             background-color: $c-main-black-lighter;
             cursor: pointer;
+        }
+        .fa-circle {
+            position: absolute;
+            top: 3px;
+            right: 3px;
         }
     }
 </style>

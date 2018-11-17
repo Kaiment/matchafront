@@ -17,13 +17,15 @@
                         router-link.navbar-item(to='/settings/profile') EDIT PROFILE
                         router-link.navbar-item(to='/settings/change_password') CHANGE PASSWORD
                         router-link.navbar-item(to='/settings/change_email') CHANGE EMAIL
+                        router-link.navbar-item(to='/settings/blacklist') BLACKLIST
+                router-link.navbar-item(v-if='is_loggued' to='/history') HISTORY
             .navbar-end
                 a.navbar-item.auth(v-if='!is_loggued' @click='home_switch(1)') LOG IN
                 a.navbar-item.auth.signup(v-if='!is_loggued' @click='home_switch(2)') SIGN UP
                 router-link.navbar-item(v-if='is_loggued' to='/messages')
                     i(class='far fa-comment')
                 router-link.navbar-item(v-if='is_loggued' to='/notification')
-                    i(:class='notif ? "fas fa-bell" : "far fa-bell"') {{ notif ? 'lel' : '' }}
+                    i(:class='nb_notifs ? "fas fa-bell" : "far fa-bell white"') {{ nb_notifs ?  ' ' + nb_notifs : '' }}
                 a.navbar-item.auth(v-if='is_loggued' @click='disconnect') DISCONNECT
 </template>
 
@@ -45,6 +47,8 @@ export default {
         disconnect () {
             localStorage.removeItem('token');
             this.$store.commit('LOG', false);
+            if (this.$socket && this.$socket.connected)
+                this.$socket.close();
             this.$router.push('/');
         },
         toggle_burger () {
@@ -95,8 +99,12 @@ export default {
         border: 0;
     }
 
-    .fa-bell {
-        color: $c-main-lighter;
+    .fa-bell { 
+        color: $c-main-lighter
+    }
+
+    .white {
+        color: $c-main-white;
     }
 
 </style>

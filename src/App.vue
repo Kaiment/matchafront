@@ -6,10 +6,9 @@
       .hero-head
         navbar
       .hero-body
-        router-view
+        transition(name='fade' mode='out-in')
+          router-view
       .hero-foot
-        button(@click='test') TEST
-      
 </template>
 
 <script>
@@ -27,18 +26,34 @@ export default {
     navbar,
     popup
   },
-  watch: {
-    connect_socket () {
-      console.log(this.$store.is_loggued)
-    }
-  },
-  computed: {
-  },
-  methods: {
-    test () {
-      console.log('ye');
+  mounted () {
+    if (this.is_loggued) {
       Vue.use(socketIo_vue, io(process.env.VUE_APP_SERV_ADDR, { query: 'auth_token=' + localStorage.getItem('token') }), store);
     }
+    this.AjaxGet('/profile/nbnewnotifs', true).then(res => {
+      if (res.hasOwnProperty('success'))
+        this.$store.dispatch('set_nb_notifs', res.nb);
+      else
+        this.$store.dispatch('notifDanger', res.err);
+    }).catch(err => {
+      console.log(err);
+    })
+
+    this.$socket.on('notification', res => {
+      let notif_id = res.notif_id;
+      let notif = res.user_info;
+      notif.id = notif_id;
+      notif['is_read'] = 0;
+      let type = res.type;
+      if (type === 'V')
+        this.$store.dispatch('add_visits', notif);
+      else if (type === 'L')
+        this.$store.dispatch('add_likes', notif);
+      else if (type === 'M')
+        this.$store.dispatch('add_matchs', notif);
+      else if (type === 'U')
+        this.$store.dispatch('add_unmatchs', notif);
+    })
   }
 }
 </script>

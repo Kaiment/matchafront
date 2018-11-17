@@ -42,7 +42,7 @@ export default {
     @import '@/assets/custom.scss';
 
     .slide-fadeX-enter-active, .slide-fadeX-leave-active  {
-        transition: all .4s ease;
+        transition: all .2s ease;
     }
     .slide-fadeX-enter, .slide-fadeX-leave-to {
         transform: translateX(40px);

@@ -21,9 +21,8 @@
                             textarea.textarea.is-small(@blur='set_bio' v-model='bio')
                         .field
                             label.label Interests
-                            tags-input(element-id='tags' v-model='selectedTags' )
+                            tags-input(element-id='tags' v-model='selectedTags', :existing-tags='existing_tags', :typeahead="true")
                             input.column.is-4.is-offset-4.c-btn(type='submit' @click='set_interests' value='UPDATE')
-                            p {{ selectedTags }}
                     div.column.is-4
                         .field
                             label.label Gender
@@ -34,7 +33,7 @@
                         .field
                             label.label Sexual orientation
                             .select
-                                select(@blur='set_sexual_orientation' v-model='sexual_orientation')
+                                select(@blur='set_sexual_orientation', v-model='sexual_orientation')
                                     option Heterosexual
                                     option Homosexual
                                     option Bisexual
@@ -76,14 +75,15 @@ export default {
             bio: '',
             selectedTags: [],
             avatar: '',
-            photos: []
+            photos: [],
+            existing_tags: {}
         }
     },
     created () {
         this.AjaxGet("/profile", true).then(data => {
             let genders = { M: 'Male', F: 'Female' };
             let sexual_orientations = { E: 'Heterosexual', O: 'Homosexual', B: 'Bisexual' };
-            this.avatar = this.avatar ? process.env.VUE_APP_SERV_ADDR + '/uploads/' + data.avatar : '/anonymous.svg'; 
+            this.avatar = data.avatar ? process.env.VUE_APP_SERV_ADDR + '/uploads/' + data.avatar : '/anonymous.svg'; 
             this.firstname = data.firstname;
             this.lastname = data.lastname;
             this.email = data.email;
@@ -93,13 +93,17 @@ export default {
             this.bio = data.bio;
             this.selectedTags = data.tags;
             this.photos = JSON.parse(data.images).map(s => process.env.VUE_APP_SERV_ADDR + '/uploads/' + s);
+            // this.AjaxGet('/profile/tags', true).then(res => {
+            //     res.forEach(t => {
+            //         this.existing_tags[t] = t;
+            //     })
+            //     console.log(this.existing_tags);
+            // }).catch(err => {
+            //     this.$store.dispatch('notifWarning', 'Failed to fetch the most populars tags');
+            // })
         }).catch(err => {
-            this.$store.dispatch('notifDanger', err.err);
-        })
-        this.AjaxGet('/profile/tags', true).then(res => {
-
-        }).catch(err => {
-            this.$store.dispatch('notifWarning', 'Failed to fetch the most populars tags');
+            this.$store.dispatch('notifDanger', 'Server internal error...');
+            this.$router.push('/dashboard');
         })
     },
     methods: {
@@ -111,15 +115,15 @@ export default {
         },
         manage_img (event, type) {
             if (type === 'image' && this.photos.length >= 4) {
-                return (this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Maximum number of photos : 4. You need to delete at least one photo' }))
+                return (this.$store.dispatch('notifDanger', 'Maximum number of photos : 4. You need to delete at least one photo'));
             }
             let img = event.target.files[0];
-            let regexp = /^image\/(png|jpg|jpeg|bmp)$/;
+            let regexp = /^image\/(png|jpg|jpeg|bmp|gif)$/;
             if (!img.type || !regexp.test(img.type)) {
-                this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Please upload an image' })
+                this.$store.dispatch('notifDanger', 'Please upload an image');
                 return ;
             } else if (Math.floor(img.size / 1000) / 1000 > 4) {
-                this.$store.commit('POP_NOTIF', { type: 'is-danger', message: 'Image size too large' })
+                this.$store.dispatch('notifDanger', 'Image size too large');
                 return ;
             }
             let formData = new FormData();
@@ -142,6 +146,7 @@ export default {
                 else if (type === 'image')
                     this.photos.push(process.env.VUE_APP_SERV_ADDR + "/uploads/" + data.image);
             }).catch(err => {
+                this.$store.dispatch('notifDanger', 'Internal server error..');
                 console.log(err);
             })
         },
@@ -180,8 +185,11 @@ export default {
             this.set_data('age', { age: this.age });
         },
         set_interests () {
-            console.log(JSON.stringify({ tags: this.selectedTags }));
-            this.set_data('tags', { tags: this.selectedTags })
+            if (this.selectedTags.length < 1)
+                return this.$store.dispatch('notifDanger', 'You need at least one interest.');
+            this.set_data('tags', { tags: this.selectedTags }) === true
+            if (this.popup.type == 0)
+                this.$store.dispatch('notifSuccess', 'Interests updated with success.');
         },
         set_gender () {
             let gender = '-1';
@@ -202,11 +210,14 @@ export default {
         },
         set_data (route, data) {
             this.AjaxCall('/profile/' + route, 'PUT', data).then(data => {
-                if (!data.hasOwnProperty('success'))
+                if (!data.hasOwnProperty('success')) {
                     this.$store.dispatch('notifDanger', data.err);
+                    return false;
+                }
+                else
+                    return true;
             }).catch(err => {
-                this.$store.dispatch('notifDanger', err.err);
-                console.log(err)
+                this.err_redirect();
             })
         }
     }
@@ -221,12 +232,10 @@ export default {
     }
 
     .profile-header {
-        border: 1px solid $c-main-black-lighter;
         padding: 2em;
     }
 
     .profile-secondary {
-        border: 1px solid $c-main-black-lighter;
         padding: 2em;
         margin-top: 1em;
     }

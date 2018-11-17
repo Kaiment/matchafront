@@ -8,7 +8,7 @@ export default {
         ...mapGetters([
             'is_loggued',
             'popup',
-            'notif'
+            'nb_notifs'
         ])
     },
     mounted () {
@@ -43,8 +43,18 @@ export default {
             }
             return fetch(url, payload).then(res => res.json());
         },
-        check_pw (pw) {
-            let regex = /f/;
+        err_redirect() {
+            this.serv_err();
+            this.redirect_home();
+        },
+        serv_err () {
+            this.$store.dispatch('notifDanger', 'Internal server error...')
+        },
+        redirect_home() {
+            if (this.is_loggued)
+                return this.$router.push('/dashboard');
+            else
+                return this.$router.push('/home');
         }
     }
 }

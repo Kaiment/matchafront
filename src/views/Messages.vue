@@ -3,6 +3,7 @@
         .columns.is-multiline
             .column.is-4
                 message_selector(
+                    user_id='2'
                     firstname='Kai',
                     lastname='Bedene',
                     last_message='Salut je m\'appelle alexandre Barbosa je suis futur millifghjfghjfghjfghjfghkfghkfghk fgkfghkfghk fghkghfk fghkfghk fghkfgh kfghk onairedf gdfgdfgdfggggdfgdfgsggdgdfgdsgdsghfgndfg hdfghdfg hdf',
