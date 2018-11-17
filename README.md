@@ -14,9 +14,9 @@
 - [x] Une liste d'**INTERETS** sous forme de **tag** (ex: #vegan...).
 - [x] Des **PHOTOS** max 5 donc une qui servira de **PHOTO DE PROFIL**.
 - [x] Possibilité de tout **MODIFIER** a tout moment.
-- [ ] **RESET PASSWORD**.
-- [ ] Pouvoir **CONSULTER LES PROFILS** des gens qui ont consulté ou **liké** le sien.
-- [ ] **SCORE DE POPULARITE PUBLIC**.
+- [x] **RESET PASSWORD**.
+- [x] Pouvoir **CONSULTER LES PROFILS** des gens qui ont consulté ou **liké** le sien.
+- [x] **SCORE DE POPULARITE PUBLIC**.
 - [x] **GEOLOCALISATION** a l'arrondissement près si **autorisé ou non**.
 
 ## Match
@@ -31,18 +31,18 @@
 - [ ] Liste **FILTRABLE** par **intervalle d'âge**, **localisation**, **intervalle de popularité** et **tags**.
 
 ## Recherche
-- [x] **intervalle d'AGE**.
-- [x] **intervalle de SCORE DE POPULARITE**.
-- [x] **LOCALISATION**.
+- [ ] **intervalle d'AGE**.
+- [ ] **intervalle de SCORE DE POPULARITE**.
+- [ ] **LOCALISATION**.
 - [ ] **1 OU PLUSIEURS TAGS**.
 - [ ] **TRIABLE et FILTRABLE** comme la liste de suggestions.
 
 ## Profil des autres utilisateurs
-- [ ] **TOUTES LES INFOS** sauf e-mail et mot de passe.
+- [x] **TOUTES LES INFOS** sauf e-mail et mot de passe.
 - [ ] Le profil visité doit **APPARAITRE DANS L'HISTORIQUE des recherches**.
-- [ ] Pouvoir **LIKER OU UNLIKER** si il y a au moins un photo.
+- [x] Pouvoir **LIKER OU UNLIKER** si il y a au moins un photo.
 - [ ] Voir que **LE PROFIL VISITE A DEJA LIKE l'utilisateur**.
-- [ ] Voir le **SCORE DE POPULARITE**.
+- [x] Voir le **SCORE DE POPULARITE**.
 - [ ] Voir si l'utilisateur est **en ligne** sinon afficher la **date de derniere visite**.
 - [ ] **SIGNALER** le profil pour fake.
 - [ ] **BLOQUER** le profil. Le profil **n'apparaitra plus dans les recherches** et ne doit **plus générer de notifications**.
@@ -60,4 +60,4 @@
 - [ ] **UNE PERSONNE MATCHEE UNLIKE**.
 - [ ] Voir **depuis n'importe quelle page** qu'une **notif n'a pas été vue**.
 
-- [ ] Seed qui servira a initialiser la base de données de 500 a 1 000 fake utilisateur pour tester l'optimisation du site.
+- [x] Seed qui servira a initialiser la base de données de 500 a 1 000 fake utilisateur pour tester l'optimisation du site.
