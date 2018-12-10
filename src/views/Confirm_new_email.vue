@@ -10,7 +10,6 @@ export default {
     created () {
         let confirm_code = this.$route.params.confirm_code;
         let route = '/profile/email/' + confirm_code;
-        console.log(route);
         this.AjaxCall(route, 'PUT', {}).then(res => {
             if (!res.hasOwnProperty('success'))
                 this.$store.dispatch('notifDanger', res.err);

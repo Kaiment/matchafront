@@ -70,16 +70,6 @@ export default {
                 console.log(err);
             })
         },
-        get_new_messages () {
-            this.AjaxGet('/profile/nbnewmessages', true).then(res => {
-                if (res.hasOwnProperty('success'))
-                    console.log(res);
-                else
-                    this.err_redirect(res.err);
-            }).catch(err => {
-                console.log(err);
-            })
-        },
         io_listen_notifs () {
             if (!this.is_loggued)
                 this.io_init_connection();

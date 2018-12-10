@@ -9,7 +9,6 @@
         transition(name='fade' mode='out-in')
           router-view
       .hero-foot
-      button(@click='test') YEAH
 </template>
 
 <script>
@@ -80,11 +79,6 @@ export default {
       this.$socket.on('message', res => {
         this.$store.dispatch('set_new_message', true);
       })
-    }
-  },
-  methods: {
-    test () {
-      console.log(this.$socket);
     }
   }
 }

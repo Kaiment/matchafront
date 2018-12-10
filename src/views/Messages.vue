@@ -47,6 +47,8 @@ export default {
     },
     mounted () {
         this.$socket.on('message', res => {
+            if (this.$route.name !== 'messages')
+                return;
             if (this.conv_shown === res.from)
                 this.AjaxGet('/profile/readallmessagesfrom/' + res.from, true).then(res => {
                     this.notif_message();
