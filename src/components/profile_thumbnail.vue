@@ -1,5 +1,5 @@
 <template lang="pug">
-    .thumbnail.columns.is-mobile(@click='goto_user')
+    .thumbnail.columns.is-mobile(@click='goto_user', :class='suggested != 0 ? "glow" : ""')
         i(v-if='is_notif', :class='is_read == 0 ? "fa fa-circle fa-xs" : "far fa-circle fa-xs"')
         .img_part.column.is-2.is-4-tablet
             img.is-center(:src='img_src')
@@ -12,6 +12,10 @@
 <script>
 export default {
     props: {
+        suggested: {
+            type: Number,
+            default: 0
+        },
         like_me: {
             type: Number,
             default: 0
@@ -104,6 +108,14 @@ export default {
             position: absolute;
             top: 3px;
             right: 3px;
+        }
+    }
+
+    .glow {
+        color: $c-main-black;
+        background-color: #d6b626;
+        &:hover {
+            background-color: #e6c11f;
         }
     }
 </style>

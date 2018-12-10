@@ -15,7 +15,7 @@ import Blocked from '@/views/Blocked.vue'
 import Reset_password from '@/views/Reset_password.vue'
 import Confirm_account from '@/views/Confirm_account.vue'
 import Confirm_new_email from '@/views/Confirm_new_email.vue'
-import Test from './views/Test.vue'
+import Admin from '@/views/Admin.vue'
 
 Vue.use(Router)
 
@@ -35,7 +35,7 @@ const if_isAuth = (to, from, next) => {
   next('/');
 }
 
-export default new Router({
+let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -43,41 +43,49 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
-      beforeEnter: if_isNotAuth
+      meta: {
+        guest: true
+      }
     },
     {
       path: '/user/:id',
       name: 'user',
-      component: User
+      component: User,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
-      beforeEnter: if_isAuth
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/history',
       name: 'history',
       component: History_view,
-      beforeEnter: if_isAuth
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/notification',
       name: 'notification',
       component: Notification_view,
-      beforeEnter: if_isAuth
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/messages',
       name: 'messages',
       component: Messages,
-      beforeEnter: if_isAuth
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: Test
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/settings',
@@ -87,21 +95,30 @@ export default new Router({
         {
           path: 'profile',
           component: Profile,
-          beforeEnter: if_isAuth
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: 'change_password',
           component: Change_password,
-          beforeEnter: if_isAuth
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: 'change_email',
           component: Change_email,
-          beforeEnter: if_isAuth
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: 'blacklist',
-          component: Blocked
+          component: Blocked,
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     },
@@ -109,18 +126,33 @@ export default new Router({
       path: '/reset/:id',
       name: 'reset',
       component: Reset_password,
-      beforeEnter: if_isNotAuth
+      meta: {
+        guest: true
+      }
     },
     {
       path: '/confirm/:token',
       name: 'confirm',
       component: Confirm_account,
-      beforeEnter: if_isNotAuth
+      meta: {
+        guest: true
+      }
     },
     {
       path: '/confirmnewemail/:confirm_code',
-      name:'confirmnewemail',
-      component: Confirm_new_email
+      name: 'confirmnewemail',
+      component: Confirm_new_email,
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/*',
@@ -128,3 +160,14 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth))
+    localStorage.getItem('token') == null ? next('/') : next();
+  else if (to.matched.some(record => record.meta.guest))
+    localStorage.getItem('token') == null ? next() : next('/dashboard');
+  else
+    next();
+})
+
+export default router

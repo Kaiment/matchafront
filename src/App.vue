@@ -9,6 +9,7 @@
         transition(name='fade' mode='out-in')
           router-view
       .hero-foot
+      button(@click='test') YEAH
 </template>
 
 <script>
@@ -20,6 +21,8 @@ import socketIo_vue from 'vue-socket.io';
 import io from 'socket.io-client';
 import store from './store.js';
 
+Vue.use(socketIo_vue, io(process.env.VUE_APP_SERV_ADDR, { query: 'auth_token=' + localStorage.getItem('token') }), store);
+
 export default {
   mixins: [base],
   components: {
@@ -27,33 +30,62 @@ export default {
     popup
   },
   mounted () {
-    if (this.is_loggued) {
-      Vue.use(socketIo_vue, io(process.env.VUE_APP_SERV_ADDR, { query: 'auth_token=' + localStorage.getItem('token') }), store);
+    if (this.$socket.connected) {
+      this.$socket.on('notification', res => {
+          console.log(this.$socket)
+          let notif_id = res.notif_id;
+          let notif = res.user_info;
+          notif.id = notif_id;
+          notif['is_read'] = 0;
+          let type = res.type;
+          if (type === 'V')
+              this.$store.dispatch('add_visits', notif);
+          else if (type === 'L')
+              this.$store.dispatch('add_likes', notif);
+          else if (type === 'M')
+              this.$store.dispatch('add_matchs', notif);
+          else if (type === 'U')
+              this.$store.dispatch('add_unmatchs', notif);
+      })
+      this.$socket.on('message', res => {
+          this.$store.dispatch('set_new_message', true);
+      })
+    } else {
+      this.$socket.on('connection', res => {
+        this.$socket.on('notification', res => {
+            console.log(this.$socket)
+            let notif_id = res.notif_id;
+            let notif = res.user_info;
+            notif.id = notif_id;
+            notif['is_read'] = 0;
+            let type = res.type;
+            if (type === 'V')
+                this.$store.dispatch('add_visits', notif);
+            else if (type === 'L')
+                this.$store.dispatch('add_likes', notif);
+            else if (type === 'M')
+                this.$store.dispatch('add_matchs', notif);
+            else if (type === 'U')
+                this.$store.dispatch('add_unmatchs', notif);
+        })
+        this.$socket.on('message', res => {
+            this.$store.dispatch('set_new_message', true);
+        })
+      })
     }
-    this.AjaxGet('/profile/nbnewnotifs', true).then(res => {
-      if (res.hasOwnProperty('success'))
-        this.$store.dispatch('set_nb_notifs', res.nb);
-      else
-        this.$store.dispatch('notifDanger', res.err);
-    }).catch(err => {
-      console.log(err);
-    })
-
-    this.$socket.on('notification', res => {
-      let notif_id = res.notif_id;
-      let notif = res.user_info;
-      notif.id = notif_id;
-      notif['is_read'] = 0;
-      let type = res.type;
-      if (type === 'V')
-        this.$store.dispatch('add_visits', notif);
-      else if (type === 'L')
-        this.$store.dispatch('add_likes', notif);
-      else if (type === 'M')
-        this.$store.dispatch('add_matchs', notif);
-      else if (type === 'U')
-        this.$store.dispatch('add_unmatchs', notif);
-    })
+    if (this.is_loggued) {
+      this.get_notifs();
+      this.notif_message();
+      this.io_listen_notifs();
+      this.$socket.on('message', res => {
+        this.$store.dispatch('set_new_message', true);
+      })
+    }
+  },
+  methods: {
+    test () {
+      console.log(this.$socket);
+    }
   }
 }
 </script>

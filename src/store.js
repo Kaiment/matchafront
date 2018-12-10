@@ -7,6 +7,7 @@ Vue.use(Vuex)
 let state = {
   home_state: 1,
   loggued: false,
+  new_message: false,
   nb_notifs: 0,
   visits: [],
   likes: [],
@@ -41,6 +42,16 @@ let mutations = {
   },
   COUNT_NOTIF (state, add) {
     state.nb_notifs += add;
+    if (state.nb_notifs < 0)
+      state.nb_notifs = 0;
+  },
+  READ_NOTIFS_FROM (state, array) {
+    for(let i = 0; i < state[array].length; i++) {
+      state[array][i].is_read = 1;
+    }
+  },
+  SET_NEW_MESSAGE (state, toggle) {
+    state.new_message = toggle;
   }
 }
 
@@ -52,7 +63,8 @@ let getters = {
   visits (state) { return state.visits },
   likes (state) { return state.likes },
   matchs (state) { return state.matchs },
-  unmatchs (state) { return state.unmatchs }
+  unmatchs (state) { return state.unmatchs },
+  new_message (state) { return state.new_message }
 }
 
 let actions = {
@@ -102,6 +114,15 @@ let actions = {
   },
   decrease_nb_notif({ commit }) {
     commit('COUNT_NOTIF', -1);
+  },
+  read_all_notifs({ commit }) {
+    commit('READ_NOTIFS_FROM', 'visits');
+    commit('READ_NOTIFS_FROM', 'likes');
+    commit('READ_NOTIFS_FROM', 'matchs');
+    commit('READ_NOTIFS_FROM', 'unmatchs');
+  },
+  set_new_message({ commit }, toggle) {
+    commit('SET_NEW_MESSAGE', toggle);
   }
 }
 

@@ -49,10 +49,12 @@ export default {
             this.AjaxCall('/get_token', 'POST', user).then(data => {
                 if (data.hasOwnProperty('success')) {
                     this.$store.dispatch('notifSuccess', 'You logged in with success');
-                    this.$store.commit('LOG', true);
                     localStorage.setItem('token', data.token);
+                    //this.io_listen_notifs();
+                    this.$socket.open();
+                    this.$store.commit('LOG', true);
                     this.$router.push('dashboard');
-                    this.io_connect();
+                    this.get_notifs();
                     if ('geolocation' in navigator) {
                         navigator.geolocation.getCurrentPosition(position => {
                             let geoloc = {
@@ -70,18 +72,11 @@ export default {
                     this.$refs.password.focus();
                 }
             }).catch(err => {
-                console.log(err)
-                if (err.status >= 500 && err.status <= 500)
-                    this.$store.dispatch('notifDanger','Server internal error, please retry...');
-                else
-                    this.$store.dispatch('notifDanger', err);
+                this.err_redirect();
             });
         },
         home_switch(select) {
             this.$store.commit('AUTH_FORM_SWITCH', select);
-        },
-        io_connect () {
-            Vue.use(socketIo_vue, io(process.env.VUE_APP_SERV_ADDR, { query: 'auth_token=' + localStorage.getItem('token') }), this.$store);
         }
     }
 }

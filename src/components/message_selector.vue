@@ -5,7 +5,6 @@
             img.is-center(:src='img_src')
         .info_part.column.is-10.is-8-tablet
             .name.text {{ firstname }} {{ lastname }}
-            .msg.text {{ last_message }}
 </template>
 
 <script>
@@ -17,7 +16,6 @@ export default {
         },
         firstname: String,
         lastname: String,
-        last_message: String,
         img_src: String
     },
     methods: {

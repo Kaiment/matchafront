@@ -15,6 +15,7 @@
                         li(:class='state == 3 ? "is-active" : "non-active"') 
                             a(@click='change_state(3)')
                                 span UNMATCH
+            button.read_notifs.c-btn(@click='read_all_notifs')  Set all notifs as read
             .container
                 transition(name='fade' mode='out-in')
                     .columns.is-multiline(v-if='state == 0')
@@ -153,7 +154,12 @@ export default {
             }).catch(err => {
                 this.err_redirect();
             })
-        }
+        },
+        read_all_notifs() {
+            this.AjaxGet('/profile/readallnotifs', true);
+            this.$store.dispatch('set_nb_notifs', 0);
+            this.$store.dispatch('read_all_notifs');
+        },
     }
 }
 </script>
@@ -194,5 +200,9 @@ export default {
 
     .fa {
         color: $c-main-lighter;
+    }
+
+    .read_notifs {
+        width: 15em;
     }
 </style>

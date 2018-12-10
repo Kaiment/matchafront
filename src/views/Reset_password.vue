@@ -33,8 +33,10 @@ export default {
                 password: this.password
             }
             this.AjaxCall(route, 'POST', body).then(data => {
-                if (data.hasOwnProperty('success'))
+                if (data.hasOwnProperty('success')) {
                     this.$store.dispatch('notifSuccess', 'Your password has been reset with success.');
+                    this.$router.push('/home');
+                }
                 else {
                     this.$store.dispatch('notifDanger', data.err);
                     this.$router.push('/home');

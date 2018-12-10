@@ -21,8 +21,7 @@
                             textarea.textarea.is-small(@blur='set_bio' v-model='bio')
                         .field
                             label.label Interests
-                            tags-input(element-id='tags' v-model='selectedTags', :existing-tags='existing_tags', :typeahead="true")
-                            input.column.is-4.is-offset-4.c-btn(type='submit' @click='set_interests' value='UPDATE')
+                            tags-input(element-id='tags', v-model='selectedTags', :existing-tags='existing_tags', :typeahead="true", @click.native='set_interests' @keyup.enter.space.native='set_interests')
                     div.column.is-4
                         .field
                             label.label Gender
@@ -188,8 +187,6 @@ export default {
             if (this.selectedTags.length < 1)
                 return this.$store.dispatch('notifDanger', 'You need at least one interest.');
             this.set_data('tags', { tags: this.selectedTags }) === true
-            if (this.popup.type == 0)
-                this.$store.dispatch('notifSuccess', 'Interests updated with success.');
         },
         set_gender () {
             let gender = '-1';
@@ -219,6 +216,9 @@ export default {
             }).catch(err => {
                 this.err_redirect();
             })
+        },
+        test () {
+            console.log('test')
         }
     }
 }

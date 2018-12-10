@@ -20,10 +20,10 @@
                         router-link.navbar-item(to='/settings/blacklist') BLACKLIST
                 router-link.navbar-item(v-if='is_loggued' to='/history') HISTORY
             .navbar-end
-                a.navbar-item.auth(v-if='!is_loggued' @click='home_switch(1)') LOG IN
-                a.navbar-item.auth.signup(v-if='!is_loggued' @click='home_switch(2)') SIGN UP
+                a.navbar-item.auth(v-if='!is_loggued && isHome' @click='home_switch(1)') LOG IN
+                a.navbar-item.auth.signup(v-if='!is_loggued && isHome' @click='home_switch(2)') SIGN UP
                 router-link.navbar-item(v-if='is_loggued' to='/messages')
-                    i(class='far fa-comment')
+                    i(:class='new_message ? "far fa-comment colored_message" : "far fa-comment"')
                 router-link.navbar-item(v-if='is_loggued' to='/notification')
                     i(:class='nb_notifs ? "fas fa-bell" : "far fa-bell white"') {{ nb_notifs ?  ' ' + nb_notifs : '' }}
                 a.navbar-item.auth(v-if='is_loggued' @click='disconnect') DISCONNECT
@@ -38,7 +38,12 @@ export default {
         return {
             isActive: false,
             drop_settings: false,
+            isHome: false
         }
+    },
+    mounted () {
+        if (this.$route.name === 'home')
+            this.isHome = true;
     },
     methods: {
         home_switch (select) {
@@ -47,8 +52,7 @@ export default {
         disconnect () {
             localStorage.removeItem('token');
             this.$store.commit('LOG', false);
-            if (this.$socket && this.$socket.connected)
-                this.$socket.close();
+            this.$socket.close();
             this.$router.push('/');
         },
         toggle_burger () {
@@ -107,4 +111,7 @@ export default {
         color: $c-main-white;
     }
 
+    .colored_message {
+        color: $c-main-lighter;
+    }
 </style>

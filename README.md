@@ -43,19 +43,19 @@
 - [x] Pouvoir **LIKER OU UNLIKER** si il y a au moins un photo.
 - [x] Voir que **LE PROFIL VISITE A DEJA LIKE l'utilisateur**.
 - [x] Voir le **SCORE DE POPULARITE**.
-- [ ] Voir si l'utilisateur est **en ligne** sinon afficher la **date de derniere visite**.
+- [x] Voir si l'utilisateur est **en ligne** sinon afficher la **date de derniere visite**.
 - [x] **SIGNALER** le profil pour fake.
 - [x] **BLOQUER** le profil. Le profil **n'apparaitra plus dans les recherches** et ne doit **plus générer de notifications**.
 
 ## Chat
-- [ ] Si les **deux utilisateurs se sont liké**, ils ont **matché**.
-- [ ] Si deux utilisateurs ont matché ils peuvent **avoir une conversation privée en temps réel**.
-- [ ] L'utilisateur peut voir **depuis n'importe quelle page** les **notifications de nouveau message**.
+- [x] Si les **deux utilisateurs se sont liké**, ils ont **matché**.
+- [x] Si deux utilisateurs ont matché ils peuvent **avoir une conversation privée en temps réel**.
+- [x] L'utilisateur peut voir **depuis n'importe quelle page** les **notifications de nouveau message**.
 
 ## Notifications
 - [x] **LIKE**.
 - [x] **VISITE**.
-- [ ] **MESSAGE**.
+- [x] **MESSAGE**.
 - [x] **MATCH**.
 - [x] **UNE PERSONNE MATCHEE UNLIKE**.
 - [x] Voir **depuis n'importe quelle page** qu'une **notif n'a pas été vue**.
